@@ -1,8 +1,10 @@
 ﻿using ForkKnight.GameObjects;
 using ForkKnight.Input;
+using ForkKnight.Levels;
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
 using Microsoft.Xna.Framework.Input;
+using TiledSharp;
 
 namespace ForkKnight
 {
@@ -10,6 +12,14 @@ namespace ForkKnight
     {
         private GraphicsDeviceManager _graphics;
         private SpriteBatch _spriteBatch;
+
+        #region Tilemaps
+
+        private TileMapManager _tileMapManager;
+        private TmxMap _level1;
+        private Texture2D _tileset;
+
+        #endregion
 
         #region Knight
 
@@ -36,7 +46,14 @@ namespace ForkKnight
         {
             _spriteBatch = new SpriteBatch(GraphicsDevice);
 
-            _knightTexture = Content.Load<Texture2D>("GameObjects\\Knight\\idle");
+            _level1 = new TmxMap(@"Content\Levels\level1.tmx");
+            _tileset = Content.Load<Texture2D>(@"Levels\" + _level1.Tilesets[0].Name);
+            var tileWidth = _level1.Tilesets[0].TileWidth;
+            var tileHeight = _level1.Tilesets[0].TileHeight;
+            var tileSetTilesWide = _tileset.Width / tileWidth;
+            _tileMapManager = new TileMapManager(_level1, _tileset, tileSetTilesWide, tileWidth, tileHeight);
+
+            _knightTexture = Content.Load<Texture2D>(@"GameObjects\Knight\idle");
         }
 
         protected override void Update(GameTime gameTime)
@@ -57,6 +74,7 @@ namespace ForkKnight
 
             _spriteBatch.Begin();
 
+            _tileMapManager.Draw(_spriteBatch);
             _knight.Draw(_spriteBatch);
 
             _spriteBatch.End();

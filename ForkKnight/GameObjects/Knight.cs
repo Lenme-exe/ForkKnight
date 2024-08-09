@@ -36,18 +36,17 @@ namespace ForkKnight.GameObjects
         public void Update(GameTime gameTime, GraphicsDeviceManager graphics)
         {
             _animation.Update(gameTime);
-            Move(gameTime, graphics);
+            Move(graphics);
         }
 
         public void Draw(SpriteBatch spriteBatch)
         {
             spriteBatch.Draw(_texture, Position, _animation.CurrentFrame.SourceRectangle, Color.White);
-
         }
 
-        public void Move(GameTime gameTime, GraphicsDeviceManager graphics)
+        public void Move(GraphicsDeviceManager graphics)
         {
-            _movementManager.Move(this, gameTime, graphics);
+            _movementManager.Move(this, graphics);
         }
     }
 }

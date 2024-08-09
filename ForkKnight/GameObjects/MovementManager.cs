@@ -7,9 +7,15 @@ using Microsoft.Xna.Framework;
 
 namespace ForkKnight.GameObjects
 {
+    internal enum Direction
+    {
+        Left,
+        Right
+    }
+
     internal class MovementManager
     {
-        public void Move(IMovable movable, GameTime gameTime, GraphicsDeviceManager graphics)
+        public void Move(IMovable movable, GraphicsDeviceManager graphics)
         {
             var direction = movable.InputReader.ReadInput();
 
@@ -22,8 +28,8 @@ namespace ForkKnight.GameObjects
 
         private bool IsWithinScreenBoundaries(Vector2 position, GraphicsDeviceManager graphics)
         {
-            var screenWidth = graphics.PreferredBackBufferWidth - 16;
-            var screenHeight = graphics.PreferredBackBufferHeight - 16;
+            var screenWidth = graphics.PreferredBackBufferWidth - 32;
+            var screenHeight = graphics.PreferredBackBufferHeight - 32;
 
             return (position.X >= 0 && position.X <= screenWidth && position.Y >= 0 && position.Y <= screenHeight);
         }
