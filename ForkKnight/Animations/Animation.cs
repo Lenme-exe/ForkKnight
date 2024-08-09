@@ -30,7 +30,7 @@ namespace ForkKnight.Animations
             CurrentFrame = _frames[_counter];
 
             _secondCounter += gameTime.ElapsedGameTime.TotalSeconds;
-            int fps = 6;
+            var fps = 6;
 
             if (_secondCounter >= 1d / fps)
             {
@@ -45,12 +45,12 @@ namespace ForkKnight.Animations
         public void GetFramesFromTextureProperties(int width, int height, int numberOfWidthSprites,
             int numberOfHeightSprites)
         {
-            int widthOfFrame = width / numberOfWidthSprites;
-            int heightOfFrame = height / numberOfHeightSprites;
+            var widthOfFrame = width / numberOfWidthSprites;
+            var heightOfFrame = height / numberOfHeightSprites;
 
-            for (int y = 0; y <= height - heightOfFrame; y+= heightOfFrame)
+            for (var y = 0; y <= height - heightOfFrame; y+= heightOfFrame)
             {
-                for (int x = 0; x <= width - widthOfFrame; x+= widthOfFrame)
+                for (var x = 0; x <= width - widthOfFrame; x+= widthOfFrame)
                 {
                     _frames.Add(new AnimationFrame(new Rectangle(x, y, widthOfFrame, heightOfFrame)));
                 }

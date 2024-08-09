@@ -1,4 +1,5 @@
 ﻿using ForkKnight.GameObjects;
+using ForkKnight.Input;
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
 using Microsoft.Xna.Framework.Input;
@@ -28,7 +29,7 @@ namespace ForkKnight
         {
             base.Initialize();
 
-            _knight = new Knight(_knightTexture);
+            _knight = new Knight(_knightTexture, new KeyboardReader());
         }
 
         protected override void LoadContent()
@@ -45,7 +46,7 @@ namespace ForkKnight
 
             // TODO: Add your update logic here
 
-            _knight.Update(gameTime);
+            _knight.Update(gameTime, _graphics);
 
             base.Update(gameTime);
         }
