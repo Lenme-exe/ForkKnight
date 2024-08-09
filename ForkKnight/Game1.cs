@@ -1,4 +1,5 @@
-﻿using Microsoft.Xna.Framework;
+﻿using ForkKnight.GameObjects;
+using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
 using Microsoft.Xna.Framework.Input;
 
@@ -9,6 +10,13 @@ namespace ForkKnight
         private GraphicsDeviceManager _graphics;
         private SpriteBatch _spriteBatch;
 
+        #region Knight
+
+        private Texture2D _knightTexture;
+        private Knight _knight;
+
+        #endregion
+
         public Game1()
         {
             _graphics = new GraphicsDeviceManager(this);
@@ -18,16 +26,16 @@ namespace ForkKnight
 
         protected override void Initialize()
         {
-            // TODO: Add your initialization logic here
-
             base.Initialize();
+
+            _knight = new Knight(_knightTexture);
         }
 
         protected override void LoadContent()
         {
             _spriteBatch = new SpriteBatch(GraphicsDevice);
 
-            // TODO: use this.Content to load your game content here
+            _knightTexture = Content.Load<Texture2D>("GameObjects\\Knight\\idle");
         }
 
         protected override void Update(GameTime gameTime)
@@ -37,6 +45,8 @@ namespace ForkKnight
 
             // TODO: Add your update logic here
 
+            _knight.Update(gameTime);
+
             base.Update(gameTime);
         }
 
@@ -44,7 +54,11 @@ namespace ForkKnight
         {
             GraphicsDevice.Clear(Color.CornflowerBlue);
 
-            // TODO: Add your drawing code here
+            _spriteBatch.Begin();
+
+            _knight.Draw(_spriteBatch);
+
+            _spriteBatch.End();
 
             base.Draw(gameTime);
         }
