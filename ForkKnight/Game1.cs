@@ -46,14 +46,14 @@ namespace ForkKnight
         {
             _spriteBatch = new SpriteBatch(GraphicsDevice);
 
-            _level1 = new TmxMap(@"Content\Levels\level1.tmx");
+            _level1 = new TmxMap(@"Content\Levels\level1..tmx");
             _tileset = Content.Load<Texture2D>(@"Levels\" + _level1.Tilesets[0].Name);
             var tileWidth = _level1.Tilesets[0].TileWidth;
             var tileHeight = _level1.Tilesets[0].TileHeight;
             var tileSetTilesWide = _tileset.Width / tileWidth;
             _tileMapManager = new TileMapManager(_level1, _tileset, tileSetTilesWide, tileWidth, tileHeight);
 
-            _knightTexture = Content.Load<Texture2D>(@"GameObjects\Knight\idle");
+            _knightTexture = Content.Load<Texture2D>(@"GameObjects\Knight\knight_flip");
         }
 
         protected override void Update(GameTime gameTime)

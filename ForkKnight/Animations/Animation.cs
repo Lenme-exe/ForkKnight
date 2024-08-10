@@ -41,7 +41,7 @@ namespace ForkKnight.Animations
             if (_counter >= _frames.Count)
                 _counter = 0;
         }
-
+        /*
         public void GetFramesFromTextureProperties(int width, int height, int numberOfWidthSprites,
             int numberOfHeightSprites)
         {
@@ -56,5 +56,6 @@ namespace ForkKnight.Animations
                 }
             }
         }
+        */
     }
 }

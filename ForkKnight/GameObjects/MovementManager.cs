@@ -15,7 +15,7 @@ namespace ForkKnight.GameObjects
 
     internal class MovementManager
     {
-        public void Move(IMovable movable, GraphicsDeviceManager graphics)
+        public void Move(IMovable movable, GameTime gameTime, GraphicsDeviceManager graphics)
         {
             var direction = movable.InputReader.ReadInput();
 
