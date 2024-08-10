@@ -38,7 +38,7 @@ namespace ForkKnight.Levels
                         var tileFrame = gid - 1;
                         var column = tileFrame % _tileSetTilesWide;
                         var row = (int)Math.Floor(tileFrame / (double)_tileSetTilesWide);
-                        float x = j % _map.Width * _map.Width;
+                        float x = (j % _map.Width) * _tileWidth;
                         float y = (float)Math.Floor(j / (double)_map.Width) * _map.TileHeight;
                         var tileSetRect = new Rectangle(_tileWidth * column, _tileHeight * row, _tileWidth,
                             _tileHeight);
