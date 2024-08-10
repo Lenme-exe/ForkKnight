@@ -34,6 +34,8 @@ namespace ForkKnight.GameObjects
         private MovementManager _movementManager = new MovementManager();
         private AnimationList _animationList;
         private MovementManager movementManager = new MovementManager();
+        private Direction lastDirection = Direction.Right;
+
 
         public Knight(Texture2D texture, IInputReader inputReader)
         {
@@ -94,11 +96,20 @@ namespace ForkKnight.GameObjects
 
         private Direction DetermineMovementDirection(Vector2 input)
         {
+            if (input.X > 0)
+            {
+                lastDirection = Direction.Right;
+            }
+            else if (input.X < 0)
+            {
+                lastDirection = Direction.Left;
+            }
+
             return (input.X > 0) ? Direction.Right : Direction.Left;
         }
         private Direction GetIdleDirection()
         {
-            return Direction.Left;
+            return lastDirection;
         }
         private void UpdateIdleAnimation(GameTime gameTime)
         {
