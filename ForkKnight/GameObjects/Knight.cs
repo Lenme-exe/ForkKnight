@@ -1,77 +1,62 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 using ForkKnight.Animations;
+using ForkKnight.Collisions;
 using ForkKnight.Input;
+using ForkKnight.Movement;
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
-using Microsoft.Xna.Framework.Input;
-using SharpDX.Direct3D9;
-using SharpDX.MediaFoundation;
 
 namespace ForkKnight.GameObjects
 {
-    internal class Knight : IGameObject, IMovable
+    internal class Knight : IGameObject, IMovable, ICollidable
     {
         public Vector2 Position { get; set; }
         public Vector2 Velocity { get; set; }
         public IInputReader InputReader { get; set; }
         public CurrentAnimation CurrentAnimation { get; set; }
         public Direction Direction { get; set; }
+        public Rectangle Hitbox { get; set; }
+        public bool IsFalling { get; set; }
 
         private readonly List<Animation> _animations;
-        private readonly MovementManager _movementManager = new MovementManager();
+        private readonly IMovementManager _movementManager;
+        private readonly ICollisionHandler _collisionHandler;
+        private readonly IAnimationManager _animationManager;
 
-        public Knight(List<Texture2D> textures, IInputReader inputReader)
+        public Knight(
+            IMovementManager movementManager,
+            ICollisionHandler collisionHandler,
+            IAnimationManager animationManager,
+            IInputReader inputReader)
         {
-            _animations = new List<Animation>();
-            foreach (var t in textures)
-            {
-                _animations.Add(new Animation(t, 32, 32));
-            }
-
+            _movementManager = movementManager;
+            _collisionHandler = collisionHandler;
+            _animationManager = animationManager;
             InputReader = inputReader;
 
             Position = Vector2.One;
             Velocity = new Vector2(2, 0);
-
+            UpdateHitbox();
         }
 
-        public void Update(GameTime gameTime, GraphicsDeviceManager graphics)
+        public void Update(GameTime gameTime, GraphicsDeviceManager graphics, List<Rectangle> collisionRects)
         {
-            Move(gameTime, graphics);
+            _movementManager.ApplyGravity(this);
+            _movementManager.Move(this, gameTime, graphics);
+            _collisionHandler.CheckCollision(this, collisionRects);
+            _animationManager.Update(this, gameTime);
+            UpdateHitbox();
         }
 
         public void Draw(SpriteBatch spriteBatch, GameTime gameTime)
         {
-            SpriteEffects effect = SpriteEffects.None;
-            if (Direction == Direction.Left)
-                effect = SpriteEffects.FlipHorizontally;
-
-            switch (CurrentAnimation)
-            {
-                case CurrentAnimation.Idle:
-                    _animations[0].Draw(spriteBatch, Position, gameTime, effect);
-                    break;
-                case CurrentAnimation.Run:
-                    _animations[1].Draw(spriteBatch, Position, gameTime, effect);
-                    break;
-                case CurrentAnimation.Hit:
-                    break;
-                case CurrentAnimation.Death:
-                    break;
-                default:
-                    throw new ArgumentOutOfRangeException();
-            }
+            _animationManager.Draw(spriteBatch, this, gameTime);
         }
 
-
-        private void Move(GameTime gameTime, GraphicsDeviceManager graphics)
+        private void UpdateHitbox()
         {
-            _movementManager.Move(this, gameTime, graphics);
-
+            Hitbox = new Rectangle((int)Position.X + 8, (int)Position.Y + 10, 32 - 10, 32 - 4);
         }
     }
 }

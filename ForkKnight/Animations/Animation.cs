@@ -14,9 +14,9 @@ namespace ForkKnight.Animations
 
         private readonly Texture2D _spriteSheet;
 
-        private List<AnimationFrame> _frames;
-        private int _counter = 0;
-        private double _secondCounter = 0;
+        private readonly List<AnimationFrame> _frames;
+        private int _counter;
+        private double _secondCounter;
 
 
         public Animation(Texture2D spriteSheet, int frameWidth, int frameHeight)
@@ -32,10 +32,8 @@ namespace ForkKnight.Animations
             );
         }
 
-        public void Draw(SpriteBatch spriteBatch, Vector2 position, GameTime gameTime, SpriteEffects effect = SpriteEffects.None)
+        public void Update(GameTime gameTime)
         {
-            CurrentFrame = _frames[_counter];
-
             _secondCounter += gameTime.ElapsedGameTime.TotalSeconds;
             var fps = 6;
 
@@ -48,7 +46,12 @@ namespace ForkKnight.Animations
             if (_counter >= _frames.Count)
                 _counter = 0;
 
-            spriteBatch.Draw(_spriteSheet, position, CurrentFrame.SourceRectangle, Color.White, 0f, new Vector2(), 1f, effect, 1);
+            CurrentFrame = _frames[_counter];
+        }
+
+        public void Draw(SpriteBatch spriteBatch, Vector2 position, GameTime gameTime, SpriteEffects effect = SpriteEffects.None)
+        {
+            spriteBatch.Draw(_spriteSheet, position, CurrentFrame.SourceRectangle, Color.White, 0f, Vector2.Zero, 1f, effect, 1);
         }
 
         public void GetFramesFromTextureProperties(int width, int height, int numberOfWidthSprites,
