@@ -15,33 +15,54 @@ namespace ForkKnight.GameObjects
         public Vector2 Position { get; set; }
         public Vector2 Velocity { get;  set; }
         public IInputReader InputReader { get; set; }
+        public CurrentAnimation CurrentAnimation { get; set; }
+        public Direction Direction { get; set; }
 
-        private Texture2D _texture;
-        private Animation _animation;
-        private MovementManager _movementManager = new MovementManager();
 
-        public Knight(Texture2D texture, IInputReader inputReader)
+        private readonly List<Animation> _animations;
+        private readonly MovementManager _movementManager = new MovementManager();
+
+        public Knight(List<Texture2D> textures, IInputReader inputReader)
         {
-            _texture = texture;
-            _animation = new Animation();
-            _animation.GetFramesFromTextureProperties(texture.Width, texture.Height, 4, 1);
+            _animations = new List<Animation>();
+            foreach (var t in textures)
+            {
+                _animations.Add(new Animation(t, 32, 32));
+            }
 
             InputReader = inputReader;
 
             Position = Vector2.One;
-            Velocity = new Vector2(4, 0);
+            Velocity = new Vector2(2, 0);
 
         }
 
         public void Update(GameTime gameTime, GraphicsDeviceManager graphics)
         {
-            _animation.Update(gameTime);
             Move(graphics);
         }
 
-        public void Draw(SpriteBatch spriteBatch)
+        public void Draw(SpriteBatch spriteBatch, GameTime gameTime)
         {
-            spriteBatch.Draw(_texture, Position, _animation.CurrentFrame.SourceRectangle, Color.White);
+            SpriteEffects effect = SpriteEffects.None;
+            if (Direction == Direction.Left)
+                effect = SpriteEffects.FlipHorizontally;
+
+            switch (CurrentAnimation)
+            {
+                case CurrentAnimation.Idle:
+                    _animations[0].Draw(spriteBatch, Position, gameTime, effect);
+                    break;
+                case CurrentAnimation.Run:
+                    _animations[1].Draw(spriteBatch, Position, gameTime, effect);
+                    break;
+                case CurrentAnimation.Hit:
+                    break;
+                case CurrentAnimation.Death:
+                    break;
+                default:
+                    throw new ArgumentOutOfRangeException();
+            }
         }
 
         public void Move(GraphicsDeviceManager graphics)

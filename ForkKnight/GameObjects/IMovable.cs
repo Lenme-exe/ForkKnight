@@ -8,6 +8,19 @@ using Microsoft.Xna.Framework;
 
 namespace ForkKnight.GameObjects
 {
+    public enum CurrentAnimation
+    {
+        Idle,
+        Run, 
+        Hit,
+        Death
+    }
+
+    public enum Direction
+    {
+        Left, 
+        Right
+    }
     internal interface IMovable
     {
         Vector2 Position { get; set; }
@@ -15,5 +28,9 @@ namespace ForkKnight.GameObjects
         Vector2 Velocity { get; set; }
 
         IInputReader InputReader { get; set; }
+
+        CurrentAnimation CurrentAnimation { get; set; }
+
+        Direction Direction { get; set; }
     }
 }

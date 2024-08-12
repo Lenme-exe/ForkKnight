@@ -1,4 +1,5 @@
-﻿using ForkKnight.GameObjects;
+﻿using System.Collections.Generic;
+using ForkKnight.GameObjects;
 using ForkKnight.Input;
 using ForkKnight.Levels;
 using Microsoft.Xna.Framework;
@@ -23,7 +24,6 @@ namespace ForkKnight
 
         #region Knight
 
-        private Texture2D _knightTexture;
         private Knight _knight;
 
         #endregion
@@ -38,13 +38,13 @@ namespace ForkKnight
         protected override void Initialize()
         {
             base.Initialize();
-
-            _knight = new Knight(_knightTexture, new KeyboardReader());
         }
 
         protected override void LoadContent()
         {
             _spriteBatch = new SpriteBatch(GraphicsDevice);
+
+            #region Tilemap
 
             _level1 = new TmxMap(@"Content\Levels\level1.tmx");
             _tileset = Content.Load<Texture2D>(@"Levels\" + _level1.Tilesets[0].Name);
@@ -53,7 +53,17 @@ namespace ForkKnight
             var tileSetTilesWide = _tileset.Width / tileWidth;
             _tileMapManager = new TileMapManager(_level1, _tileset, tileSetTilesWide, tileWidth, tileHeight);
 
-            _knightTexture = Content.Load<Texture2D>(@"GameObjects\Knight\idle");
+            #endregion
+
+            #region Knight
+
+            _knight = new Knight(new List<Texture2D>()
+            {
+                Content.Load<Texture2D>(@"GameObjects\Knight\idle"),
+                Content.Load<Texture2D>(@"GameObjects\Knight\run")
+            }, new KeyboardReader());
+
+            #endregion
         }
 
         protected override void Update(GameTime gameTime)
@@ -75,7 +85,7 @@ namespace ForkKnight
             _spriteBatch.Begin();
 
             _tileMapManager.Draw(_spriteBatch);
-            _knight.Draw(_spriteBatch);
+            _knight.Draw(_spriteBatch, gameTime);
 
             _spriteBatch.End();
 
