@@ -1,14 +1,14 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
+using ForkKnight.GameObjects;
 using Microsoft.Xna.Framework;
 
-namespace ForkKnight.GameObjects
+namespace ForkKnight.Movement
 {
-    internal class MovementManager
+    internal class MovementManager : IMovementManager
     {
+        private const float Gravity = 0.5f;
+        private const float MaxFallSpeed = 10f;
+
         public void Move(IMovable movable, GameTime gameTime, GraphicsDeviceManager graphics)
         {
             var direction = movable.InputReader.ReadInput();
@@ -27,16 +27,28 @@ namespace ForkKnight.GameObjects
             var distance = direction * movable.Velocity;
             var futurePosition = movable.Position + distance;
 
+            futurePosition.Y += movable.Velocity.Y;
+
             if (IsWithinScreenBoundaries(futurePosition, graphics))
+            {
                 movable.Position = futurePosition;
+                movable.IsFalling = true;
+            }
+        }
+
+        public void ApplyGravity(IMovable movable)
+        {
+            if (movable.IsFalling)
+                movable.Velocity = new Vector2(movable.Velocity.X, Math.Min(movable.Velocity.Y + Gravity, MaxFallSpeed));
+            else
+                movable.Velocity = new Vector2(movable.Velocity.X, 0);
         }
 
         private bool IsWithinScreenBoundaries(Vector2 position, GraphicsDeviceManager graphics)
         {
             var screenWidth = graphics.PreferredBackBufferWidth - 32;
-            var screenHeight = graphics.PreferredBackBufferHeight - 32;
 
-            return (position.X >= 0 && position.X <= screenWidth && position.Y >= 0 && position.Y <= screenHeight);
+            return position.X >= 0 && position.X <= screenWidth;
         }
     }
 }

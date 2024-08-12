@@ -21,7 +21,7 @@ namespace ForkKnight.GameObjects
         Left, 
         Right
     }
-    internal interface IMovable
+    internal interface IMovable: ICollidable
     {
         Vector2 Position { get; set; }
 
@@ -32,5 +32,7 @@ namespace ForkKnight.GameObjects
         CurrentAnimation CurrentAnimation { get; set; }
 
         Direction Direction { get; set; }
+
+        bool IsFalling { get; set; }
     }
 }

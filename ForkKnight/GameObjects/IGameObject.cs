@@ -10,7 +10,7 @@ namespace ForkKnight.GameObjects
 {
     internal interface IGameObject
     {
-        void Update(GameTime gameTime, GraphicsDeviceManager graphics);
+        void Update(GameTime gameTime, GraphicsDeviceManager graphics, List<Rectangle> collisionRects);
         void Draw(SpriteBatch spriteBatch, GameTime gameTime);
     }
 }
