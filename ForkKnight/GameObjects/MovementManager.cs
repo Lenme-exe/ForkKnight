@@ -7,17 +7,22 @@ using Microsoft.Xna.Framework;
 
 namespace ForkKnight.GameObjects
 {
-    internal enum Direction
-    {
-        Left,
-        Right
-    }
-
     internal class MovementManager
     {
         public void Move(IMovable movable, GameTime gameTime, GraphicsDeviceManager graphics)
         {
             var direction = movable.InputReader.ReadInput();
+
+            if (direction.X != 0)
+                movable.CurrentAnimation = CurrentAnimation.Run;
+            else
+                movable.CurrentAnimation = CurrentAnimation.Idle;
+
+            if (direction.X > 0)
+                movable.Direction = Direction.Right;
+            else if (direction.X < 0)
+                movable.Direction = Direction.Left;
+
 
             var distance = direction * movable.Velocity;
             var futurePosition = movable.Position + distance;

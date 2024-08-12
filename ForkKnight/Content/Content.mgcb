@@ -85,8 +85,8 @@
 /processorParam:TextureFormat=Color
 /build:GameObjects/Knight/run.png
 
-#begin Levels/level1..tmx
-/copy:Levels/level1..tmx
+#begin Levels/level1.tmx
+/copy:Levels/level1.tmx
 
 #begin Levels/world_tileset.png
 /importer:TextureImporter
