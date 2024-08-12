@@ -51,23 +51,6 @@ namespace ForkKnight.Animations
             spriteBatch.Draw(_spriteSheet, position, CurrentFrame.SourceRectangle, Color.White, 0f, new Vector2(), 1f, effect, 1);
         }
 
-        //public void Update(GameTime gameTime)
-        //{
-        //    CurrentFrame = _frames[_counter];
-
-        //    _secondCounter += gameTime.ElapsedGameTime.TotalSeconds;
-        //    var fps = 6;
-
-        //    if (_secondCounter >= 1d / fps)
-        //    {
-        //        _counter++;
-        //        _secondCounter = 0;
-        //    }
-
-        //    if (_counter >= _frames.Count)
-        //        _counter = 0;
-        //}
-
         public void GetFramesFromTextureProperties(int width, int height, int numberOfWidthSprites,
             int numberOfHeightSprites)
         {

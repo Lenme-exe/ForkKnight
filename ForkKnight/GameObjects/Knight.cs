@@ -7,17 +7,19 @@ using ForkKnight.Animations;
 using ForkKnight.Input;
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
+using Microsoft.Xna.Framework.Input;
+using SharpDX.Direct3D9;
+using SharpDX.MediaFoundation;
 
 namespace ForkKnight.GameObjects
 {
     internal class Knight : IGameObject, IMovable
     {
         public Vector2 Position { get; set; }
-        public Vector2 Velocity { get;  set; }
+        public Vector2 Velocity { get; set; }
         public IInputReader InputReader { get; set; }
         public CurrentAnimation CurrentAnimation { get; set; }
         public Direction Direction { get; set; }
-
 
         private readonly List<Animation> _animations;
         private readonly MovementManager _movementManager = new MovementManager();
@@ -39,7 +41,7 @@ namespace ForkKnight.GameObjects
 
         public void Update(GameTime gameTime, GraphicsDeviceManager graphics)
         {
-            Move(graphics);
+            Move(gameTime, graphics);
         }
 
         public void Draw(SpriteBatch spriteBatch, GameTime gameTime)
@@ -65,9 +67,11 @@ namespace ForkKnight.GameObjects
             }
         }
 
-        public void Move(GraphicsDeviceManager graphics)
+
+        private void Move(GameTime gameTime, GraphicsDeviceManager graphics)
         {
-            _movementManager.Move(this, graphics);
+            _movementManager.Move(this, gameTime, graphics);
+
         }
     }
 }
