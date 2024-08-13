@@ -33,7 +33,11 @@ namespace ForkKnight.GameObjects
 
         Direction Direction { get; set; }
 
-        float MovementSpeed { get; set; }
+        float Acceleration { get; set; }
+
+        float MaxSpeed { get; set; }
+
+        float JumpStrength { get; set; }
 
         bool IsFalling { get; set; }
 

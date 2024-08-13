@@ -16,7 +16,9 @@ namespace ForkKnight.GameObjects
         public IInputReader InputReader { get; set; }
         public CurrentAnimation CurrentAnimation { get; set; }
         public Direction Direction { get; set; }
-        public float MovementSpeed { get; set; }
+        public float Acceleration { get; set; }
+        public float MaxSpeed { get; set; }
+        public float JumpStrength { get; set; }
         public Rectangle Hitbox { get; set; }
         public bool IsFalling { get; set; }
         public bool IsJumping { get; set; }
@@ -38,7 +40,9 @@ namespace ForkKnight.GameObjects
 
             Position = Vector2.One;
             Velocity = Vector2.Zero;
-            MovementSpeed = 3f;
+            Acceleration = 5f;
+            MaxSpeed = 3f;
+            JumpStrength = -10f;
             UpdateHitbox();
         }
 

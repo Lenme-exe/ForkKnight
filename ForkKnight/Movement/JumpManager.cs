@@ -10,7 +10,6 @@ namespace ForkKnight.Movement
 {
     internal class JumpManager : IJumpManager
     {
-        private readonly float _jumpStrength = -10f;
         private readonly float _gravity = 0.5f;
         public void HandleJump(IMovable movable, GameTime gameTime)
         {
@@ -28,7 +27,7 @@ namespace ForkKnight.Movement
             if (!movable.IsJumping && !movable.IsFalling && movable.InputReader.IsJumping())
             {
                 movable.IsJumping = true;
-                movable.Velocity = new Vector2(movable.Velocity.X, _jumpStrength);
+                movable.Velocity = new Vector2(movable.Velocity.X, movable.JumpStrength);
             }
         }
     }
