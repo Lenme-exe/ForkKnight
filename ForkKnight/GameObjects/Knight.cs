@@ -9,17 +9,18 @@ using Microsoft.Xna.Framework.Graphics;
 
 namespace ForkKnight.GameObjects
 {
-    internal class Knight : IGameObject, IMovable, ICollidable
+    internal class Knight : IGameObject, IMovable
     {
         public Vector2 Position { get; set; }
         public Vector2 Velocity { get; set; }
         public IInputReader InputReader { get; set; }
         public CurrentAnimation CurrentAnimation { get; set; }
         public Direction Direction { get; set; }
+        public float MovementSpeed { get; set; }
         public Rectangle Hitbox { get; set; }
         public bool IsFalling { get; set; }
+        public bool IsJumping { get; set; }
 
-        private readonly List<Animation> _animations;
         private readonly IMovementManager _movementManager;
         private readonly ICollisionHandler _collisionHandler;
         private readonly IAnimationManager _animationManager;
@@ -36,13 +37,13 @@ namespace ForkKnight.GameObjects
             InputReader = inputReader;
 
             Position = Vector2.One;
-            Velocity = new Vector2(2, 0);
+            Velocity = Vector2.Zero;
+            MovementSpeed = 3f;
             UpdateHitbox();
         }
 
         public void Update(GameTime gameTime, GraphicsDeviceManager graphics, List<Rectangle> collisionRects)
         {
-            _movementManager.ApplyGravity(this);
             _movementManager.Move(this, gameTime, graphics);
             _collisionHandler.CheckCollision(this, collisionRects);
             _animationManager.Update(this, gameTime);

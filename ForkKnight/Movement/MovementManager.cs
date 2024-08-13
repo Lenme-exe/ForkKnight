@@ -8,11 +8,20 @@ namespace ForkKnight.Movement
     {
         private const float Gravity = 0.5f;
         private const float MaxFallSpeed = 10f;
-        private const float JumpStrength = -10f;
+        private readonly IJumpManager _jumpManager;
+
+        public MovementManager(IJumpManager jumpManager)
+        {
+            _jumpManager = jumpManager;
+        }
 
         public void Move(IMovable movable, GameTime gameTime, GraphicsDeviceManager graphics)
         {
+            _jumpManager.HandleJump(movable, gameTime);
+
             var direction = movable.InputReader.ReadInput();
+
+            movable.Velocity = new Vector2(direction.X * movable.MovementSpeed, movable.Velocity.Y);
 
             if (direction.X != 0)
                 movable.CurrentAnimation = CurrentAnimation.Run;
@@ -24,23 +33,14 @@ namespace ForkKnight.Movement
             else if (direction.X < 0)
                 movable.Direction = Direction.Left;
 
-            // Handle jumping
-            if (direction.Y < 0 && !movable.IsFalling)
-            {
-                movable.Velocity = new Vector2(movable.Velocity.X, JumpStrength);
-                movable.IsFalling = true;
-            }
+            var futurePosition = movable.Position + movable.Velocity;
 
-            var distance = direction * movable.Velocity;
-            var futurePosition = movable.Position + distance;
-
-            futurePosition.Y += movable.Velocity.Y;
-
-            if (IsWithinScreenBoundaries(futurePosition, graphics))
-            {
+            //if (IsWithinScreenBoundaries(futurePosition, graphics))
+            //{
                 movable.Position = futurePosition;
                 movable.IsFalling = true;
-            }
+            //}
+            ApplyGravity(movable);
         }
 
         public void ApplyGravity(IMovable movable)

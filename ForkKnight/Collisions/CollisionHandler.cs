@@ -1,4 +1,5 @@
 ﻿using System.Collections.Generic;
+using System.Diagnostics;
 using System.Windows.Forms;
 using ForkKnight.GameObjects;
 using Microsoft.Xna.Framework;
@@ -20,11 +21,39 @@ internal class CollisionHandler : ICollisionHandler
 
     private void HandleCollision(IMovable movable, Rectangle collisionRectangle)
     {
-        if (movable.Velocity.Y > 0 && movable.Hitbox.Bottom > collisionRectangle.Top)
+        Debug.WriteLine(movable.Velocity);
+        var intersection = Rectangle.Intersect(movable.Hitbox, collisionRectangle);
+
+        if (intersection.Height < intersection.Width)
         {
-            movable.Position = new Vector2(movable.Position.X, collisionRectangle.Top - movable.Hitbox.Height);
-            movable.Velocity = new Vector2(movable.Velocity.X, 0);
-            movable.IsFalling = false;
+            if (movable.Velocity.Y > 0 && movable.Hitbox.Bottom > collisionRectangle.Top &&
+                movable.Hitbox.Top < collisionRectangle.Top)
+            {
+                movable.Position = new Vector2(movable.Position.X, collisionRectangle.Top - movable.Hitbox.Height);
+                movable.Velocity = new Vector2(movable.Velocity.X, 0);
+                movable.IsFalling = false;
+            }
+            else if (movable.Velocity.Y < 0 && movable.Hitbox.Top < collisionRectangle.Bottom &&
+                     movable.Hitbox.Bottom > collisionRectangle.Bottom)
+            {
+                movable.Position = new Vector2(movable.Position.X, collisionRectangle.Bottom);
+                movable.Velocity = new Vector2(movable.Velocity.X, 0);
+            }
+        }
+        else if (intersection.Width < intersection.Height)
+        {
+            if (movable.Velocity.X > 0 && movable.Hitbox.Right > collisionRectangle.Left &&
+                movable.Hitbox.Left < collisionRectangle.Left)
+            {
+                movable.Position = new Vector2(collisionRectangle.Left - movable.Hitbox.Width, movable.Position.Y);
+                movable.Velocity = new Vector2(0, movable.Velocity.Y);
+            }
+            else if (movable.Velocity.X < 0 && movable.Hitbox.Left < collisionRectangle.Right &&
+                     movable.Hitbox.Right > collisionRectangle.Right)
+            {
+                movable.Position = new Vector2(collisionRectangle.Right, movable.Position.Y);
+                movable.Velocity = new Vector2(0, movable.Velocity.Y);
+            }
         }
     }
 }
