@@ -19,7 +19,6 @@ namespace ForkKnight.GameObjects
         public Rectangle Hitbox { get; set; }
         public bool IsFalling { get; set; }
 
-        private readonly List<Animation> _animations;
         private readonly IMovementManager _movementManager;
         private readonly ICollisionHandler _collisionHandler;
         private readonly IAnimationManager _animationManager;
