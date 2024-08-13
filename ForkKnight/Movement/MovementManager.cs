@@ -21,6 +21,8 @@ namespace ForkKnight.Movement
 
             var direction = movable.InputReader.ReadInput();
 
+            movable.Velocity = new Vector2(direction.X * movable.MovementSpeed, movable.Velocity.Y);
+
             if (direction.X != 0)
                 movable.CurrentAnimation = CurrentAnimation.Run;
             else
@@ -32,16 +34,14 @@ namespace ForkKnight.Movement
                 movable.Direction = Direction.Left;
 
 
-            var distance = direction * movable.Velocity;
-            var futurePosition = movable.Position + distance;
+            var futurePosition = movable.Position + movable.Velocity;
 
-            futurePosition.Y += movable.Velocity.Y;
-
-            if (IsWithinScreenBoundaries(futurePosition, graphics))
-            {
+            //if (IsWithinScreenBoundaries(futurePosition, graphics))
+            //{
                 movable.Position = futurePosition;
                 movable.IsFalling = true;
-            }
+            //}
+            ApplyGravity(movable);
         }
 
         public void ApplyGravity(IMovable movable)

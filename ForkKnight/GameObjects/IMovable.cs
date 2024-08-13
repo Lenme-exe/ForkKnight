@@ -33,6 +33,8 @@ namespace ForkKnight.GameObjects
 
         Direction Direction { get; set; }
 
+        float MovementSpeed { get; set; }
+
         bool IsFalling { get; set; }
 
         bool IsJumping { get; set; }

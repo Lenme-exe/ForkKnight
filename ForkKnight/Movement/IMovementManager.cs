@@ -11,7 +11,5 @@ namespace ForkKnight.Movement
     internal interface IMovementManager
     {
         void Move(IMovable movable, GameTime gameTime, GraphicsDeviceManager graphics);
-
-        public void ApplyGravity(IMovable movable);
     }
 }
