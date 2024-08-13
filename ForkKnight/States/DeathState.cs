@@ -12,8 +12,8 @@ namespace ForkKnight.States
         private List<Component> _components;
         public DeathState(Game1 game, GraphicsDevice graphicsDevice, ContentManager contentManager) : base(game, graphicsDevice, contentManager)
         {
-            var buttonTexture = _contentManager.Load<Texture2D>("");
-            var font = _contentManager.Load<SpriteFont>("");
+            var buttonTexture = _contentManager.Load<Texture2D>(@"UI\button");
+            var font = _contentManager.Load<SpriteFont>(@"UI\font");
 
             var restartButton = new Button(buttonTexture, font)
             {
@@ -21,11 +21,19 @@ namespace ForkKnight.States
                 Text = "Restart",
             };
 
+            var mainMenuButton = new Button(buttonTexture, font)
+            {
+                Position = new Vector2(300, 250),
+                Text = "Main menu",
+            };
+
             restartButton.Click += RestartButtonOnClick;
+            mainMenuButton.Click += MainMenuButtonOnClick;
 
             _components = new List<Component>()
             {
                 restartButton,
+                mainMenuButton,
             };
         }
 
@@ -53,6 +61,11 @@ namespace ForkKnight.States
         private void RestartButtonOnClick(object sender, EventArgs e)
         {
             _game.ChangeState(new GameState(_game, _graphicsDevice, _contentManager));
+        }
+
+        private void MainMenuButtonOnClick(object sender, EventArgs e)
+        {
+            throw new NotImplementedException();
         }
     }
 }

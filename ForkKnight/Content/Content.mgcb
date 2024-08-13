@@ -100,3 +100,25 @@
 /processorParam:TextureFormat=Color
 /build:Levels/world_tileset.png
 
+#begin UI/button.png
+/importer:TextureImporter
+/processor:TextureProcessor
+/processorParam:ColorKeyColor=255,0,255,255
+/processorParam:ColorKeyEnabled=True
+/processorParam:GenerateMipmaps=False
+/processorParam:PremultiplyAlpha=True
+/processorParam:ResizeToPowerOfTwo=False
+/processorParam:MakeSquare=False
+/processorParam:TextureFormat=Color
+/build:UI/button.png
+
+#begin UI/font.spritefont
+/importer:FontDescriptionImporter
+/processor:FontDescriptionProcessor
+/processorParam:PremultiplyAlpha=True
+/processorParam:TextureFormat=Compressed
+/build:UI/font.spritefont
+
+#begin UI/PixelOperator8.ttf
+/copy:UI/PixelOperator8.ttf
+

@@ -123,6 +123,11 @@ namespace ForkKnight.States
         public override void Update(GameTime gameTime)
         {
             _knight.Update(gameTime, _collisionRects);
+
+            if (_knight.Position.Y > _graphicsDevice.Viewport.Height + 100)
+            {
+                _game.ChangeState(new DeathState(_game, _graphicsDevice, _contentManager));
+            }
         }
     }
 }
