@@ -8,9 +8,17 @@ namespace ForkKnight.Movement
     {
         private const float Gravity = 0.5f;
         private const float MaxFallSpeed = 10f;
+        private readonly IJumpManager _jumpManager;
+
+        public MovementManager(IJumpManager jumpManager)
+        {
+            _jumpManager = jumpManager;
+        }
 
         public void Move(IMovable movable, GameTime gameTime, GraphicsDeviceManager graphics)
         {
+            _jumpManager.HandleJump(movable, gameTime);
+
             var direction = movable.InputReader.ReadInput();
 
             if (direction.X != 0)

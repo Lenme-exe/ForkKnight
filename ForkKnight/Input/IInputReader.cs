@@ -10,5 +10,6 @@ namespace ForkKnight.Input
     internal interface IInputReader
     {
         Vector2 ReadInput();
+        bool IsJumping();
     }
 }

@@ -31,6 +31,7 @@ namespace ForkKnight
         private IAnimationManager _animationManager;
         private IMovementManager _movementManager;
         private ICollisionHandler _collisionHandler;
+        private IJumpManager _jumpManager;
 
         #endregion
 
@@ -95,7 +96,8 @@ namespace ForkKnight
 
             #region MovementManager and CollisionHandler
 
-            _movementManager = new MovementManager();
+            _jumpManager = new JumpManager();
+            _movementManager = new MovementManager(_jumpManager);
             _collisionHandler = new CollisionHandler();
 
             #endregion

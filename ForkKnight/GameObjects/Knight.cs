@@ -9,7 +9,7 @@ using Microsoft.Xna.Framework.Graphics;
 
 namespace ForkKnight.GameObjects
 {
-    internal class Knight : IGameObject, IMovable, ICollidable
+    internal class Knight : IGameObject, IMovable
     {
         public Vector2 Position { get; set; }
         public Vector2 Velocity { get; set; }
@@ -18,6 +18,7 @@ namespace ForkKnight.GameObjects
         public Direction Direction { get; set; }
         public Rectangle Hitbox { get; set; }
         public bool IsFalling { get; set; }
+        public bool IsJumping { get; set; }
 
         private readonly IMovementManager _movementManager;
         private readonly ICollisionHandler _collisionHandler;

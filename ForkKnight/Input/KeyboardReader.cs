@@ -22,5 +22,12 @@ namespace ForkKnight.Input
 
             return direction;
         }
+
+        public bool IsJumping()
+        {
+            var state = Keyboard.GetState();
+
+            return state.IsKeyDown(Keys.Space);
+        }
     }
 }
