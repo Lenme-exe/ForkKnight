@@ -6,11 +6,12 @@ using System.Threading.Tasks;
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
 
-namespace ForkKnight.GameObjects
+namespace ForkKnight.Controls
 {
-    internal interface IGameObject
+    internal abstract class Component
     {
-        void Update(GameTime gameTime, List<Rectangle> collisionRects);
-        void Draw(SpriteBatch spriteBatch, GameTime gameTime);
+        public abstract void Draw(GameTime gameTime, SpriteBatch spriteBatch);
+
+        public abstract void Update(GameTime gameTime);
     }
 }

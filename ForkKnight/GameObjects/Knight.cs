@@ -42,9 +42,9 @@ namespace ForkKnight.GameObjects
             UpdateHitbox();
         }
 
-        public void Update(GameTime gameTime, GraphicsDeviceManager graphics, List<Rectangle> collisionRects)
+        public void Update(GameTime gameTime, List<Rectangle> collisionRects)
         {
-            _movementManager.Move(this, gameTime, graphics);
+            _movementManager.Move(this, gameTime);
             _collisionHandler.CheckCollision(this, collisionRects);
             _animationManager.Update(this, gameTime);
             UpdateHitbox();
