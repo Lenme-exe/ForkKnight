@@ -33,7 +33,6 @@ namespace ForkKnight.Movement
             else if (direction.X < 0)
                 movable.Direction = Direction.Left;
 
-
             var futurePosition = movable.Position + movable.Velocity;
 
             //if (IsWithinScreenBoundaries(futurePosition, graphics))
