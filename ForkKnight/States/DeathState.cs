@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
-using ForkKnight.Controls;
+using ForkKnight.Components;
+using ForkKnight.Components.Controls;
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Content;
 using Microsoft.Xna.Framework.Graphics;
@@ -10,21 +11,32 @@ namespace ForkKnight.States
     internal class DeathState : State
     {
         private List<Component> _components;
+        private SpriteFont _font;
+        private Texture2D _background;
         public DeathState(Game1 game, GraphicsDevice graphicsDevice, ContentManager contentManager) : base(game, graphicsDevice, contentManager)
         {
             var buttonTexture = _contentManager.Load<Texture2D>(@"UI\button");
-            var font = _contentManager.Load<SpriteFont>(@"UI\font");
+            _font = _contentManager.Load<SpriteFont>(@"UI\font");
 
-            var restartButton = new Button(buttonTexture, font)
+            _background = _contentManager.Load<Texture2D>(@"background");
+
+            var image = _contentManager.Load<Texture2D>(@"UI\death-image");
+
+            var restartButton = new Button(buttonTexture, _font)
             {
-                Position = new Vector2(300, 200),
+                Position = new Vector2(_graphicsDevice.Viewport.Width / 2 - buttonTexture.Width / 2, 250),
                 Text = "Restart",
             };
 
-            var mainMenuButton = new Button(buttonTexture, font)
+            var mainMenuButton = new Button(buttonTexture, _font)
             {
-                Position = new Vector2(300, 250),
+                Position = new Vector2(_graphicsDevice.Viewport.Width / 2 - buttonTexture.Width / 2, 320),
                 Text = "Main menu",
+            };
+
+            var deathImage = new Image(image)
+            {
+                DestinationRectangle = new Rectangle(_graphicsDevice.Viewport.Width / 2 - 32, 200, 64, 48),
             };
 
             restartButton.Click += RestartButtonOnClick;
@@ -34,12 +46,17 @@ namespace ForkKnight.States
             {
                 restartButton,
                 mainMenuButton,
+                deathImage
             };
         }
 
         public override void Draw(GameTime gameTime, SpriteBatch spriteBatch)
         {
             spriteBatch.Begin();
+
+            spriteBatch.Draw(_background, new Rectangle(0, 0, _graphicsDevice.Viewport.Width, _graphicsDevice.Viewport.Height), Color.White);
+
+            spriteBatch.DrawString(_font, "Game Over", new Vector2(_graphicsDevice.Viewport.Width / 2 - _font.MeasureString("Game Over").Length() / 2, 150), Color.White);
 
             foreach (var c in _components)
                 c.Draw(gameTime, spriteBatch);

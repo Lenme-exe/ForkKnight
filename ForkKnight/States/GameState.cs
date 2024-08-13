@@ -16,6 +16,7 @@ using Microsoft.Xna.Framework.Content;
 using Microsoft.Xna.Framework.Graphics;
 using SharpDX.Direct2D1;
 using TiledSharp;
+using Color = Microsoft.Xna.Framework.Color;
 using Rectangle = Microsoft.Xna.Framework.Rectangle;
 using SpriteBatch = Microsoft.Xna.Framework.Graphics.SpriteBatch;
 
@@ -29,6 +30,8 @@ namespace ForkKnight.States
         private TmxMap _level1;
         private Texture2D _tileset;
         private List<Rectangle> _collisionRects;
+        private Texture2D _background;
+
         #endregion
 
         #region Knight
@@ -47,6 +50,7 @@ namespace ForkKnight.States
 
             _level1 = new TmxMap(@"Content\Levels\level1.tmx");
             _tileset = _contentManager.Load<Texture2D>(@"Levels\" + _level1.Tilesets[0].Name);
+            _background = _contentManager.Load<Texture2D>(@"background");
             var tileWidth = _level1.Tilesets[0].TileWidth;
             var tileHeight = _level1.Tilesets[0].TileHeight;
             var tileSetTilesWide = _tileset.Width / tileWidth;
@@ -109,6 +113,7 @@ namespace ForkKnight.States
         {
             spriteBatch.Begin();
 
+            spriteBatch.Draw(_background, new Rectangle(0, 0, _graphicsDevice.Viewport.Width, _graphicsDevice.Viewport.Height), Color.White);
             _tileMapManager.Draw(spriteBatch);
             _knight.Draw(spriteBatch, gameTime);
 

@@ -7,7 +7,7 @@ using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
 using Microsoft.Xna.Framework.Input;
 
-namespace ForkKnight.Controls
+namespace ForkKnight.Components.Controls
 {
     internal class Button : Component
     {
@@ -17,13 +17,7 @@ namespace ForkKnight.Controls
         public Color PenColour { get; set; }
         public Vector2 Position { get; set; }
 
-        public Rectangle Rectangle
-        {
-            get
-            {
-                return new Rectangle((int)Position.X, (int)Position.Y, _texture.Width, _texture.Height);
-            }
-        }
+        public Rectangle Rectangle => new((int)Position.X, (int)Position.Y, _texture.Width, _texture.Height);
 
         public string Text { get; set; }
 
@@ -52,8 +46,8 @@ namespace ForkKnight.Controls
 
             if (!string.IsNullOrEmpty(Text))
             {
-                var x = (Rectangle.X + (Rectangle.Width / 2)) - (_font.MeasureString(Text).X / 2);
-                var y = (Rectangle.Y + (Rectangle.Height / 2)) - (_font.MeasureString(Text).Y / 2);
+                var x = Rectangle.X + Rectangle.Width / 2 - _font.MeasureString(Text).X / 2;
+                var y = Rectangle.Y + Rectangle.Height / 2 - _font.MeasureString(Text).Y / 2;
 
                 spriteBatch.DrawString(_font, Text, new Vector2(x, y), PenColour);
             }
