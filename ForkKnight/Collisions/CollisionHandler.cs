@@ -21,7 +21,6 @@ internal class CollisionHandler : ICollisionHandler
 
     private void HandleCollision(IMovable movable, Rectangle collisionRectangle)
     {
-        Debug.WriteLine(movable.Velocity);
         var intersection = Rectangle.Intersect(movable.Hitbox, collisionRectangle);
 
         if (intersection.Height < intersection.Width)

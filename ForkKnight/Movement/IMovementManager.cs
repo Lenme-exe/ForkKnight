@@ -10,6 +10,6 @@ namespace ForkKnight.Movement
 {
     internal interface IMovementManager
     {
-        void Move(IMovable movable, GameTime gameTime, GraphicsDeviceManager graphics);
+        void Move(IMovable movable, GameTime gameTime);
     }
 }
