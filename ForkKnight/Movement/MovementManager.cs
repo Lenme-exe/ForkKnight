@@ -8,6 +8,7 @@ namespace ForkKnight.Movement
     {
         private const float Gravity = 0.5f;
         private const float MaxFallSpeed = 10f;
+        private const float JumpStrength = -10f;
 
         public void Move(IMovable movable, GameTime gameTime, GraphicsDeviceManager graphics)
         {
@@ -23,6 +24,12 @@ namespace ForkKnight.Movement
             else if (direction.X < 0)
                 movable.Direction = Direction.Left;
 
+            // Handle jumping
+            if (direction.Y < 0 && !movable.IsFalling)
+            {
+                movable.Velocity = new Vector2(movable.Velocity.X, JumpStrength);
+                movable.IsFalling = true;
+            }
 
             var distance = direction * movable.Velocity;
             var futurePosition = movable.Position + distance;
