@@ -3,25 +3,26 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using ForkKnight.Collisions;
 using ForkKnight.Input;
 using Microsoft.Xna.Framework;
 
-namespace ForkKnight.GameObjects
+namespace ForkKnight.Movement
 {
     public enum CurrentAnimation
     {
         Idle,
-        Run, 
+        Run,
         Hit,
         Death
     }
 
     public enum Direction
     {
-        Left, 
+        Left,
         Right
     }
-    internal interface IMovable: ICollidable
+    internal interface IMovable : ICollidable
     {
         Vector2 Position { get; set; }
 

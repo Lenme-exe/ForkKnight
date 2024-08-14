@@ -1,7 +1,7 @@
 ﻿using System.Collections.Generic;
 using System.Diagnostics;
 using System.Windows.Forms;
-using ForkKnight.GameObjects;
+using ForkKnight.Movement;
 using Microsoft.Xna.Framework;
 
 namespace ForkKnight.Collisions;

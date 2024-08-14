@@ -1,50 +1,52 @@
 ﻿using System.Collections.Generic;
 using ForkKnight.GameObjects;
+using ForkKnight.Movement;
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
 
 namespace ForkKnight.Animations;
 
 internal class AnimationManager: IAnimationManager
-{
+{    
+    public Animation CurrentAnimation { get; set; }
+
     private readonly Dictionary<CurrentAnimation, Animation> _animations;
-    private Animation _currentAnimation;
 
     public AnimationManager(Dictionary<CurrentAnimation, Animation> animations)
     {
         _animations = animations;
-        _currentAnimation = _animations[CurrentAnimation.Idle];
+        CurrentAnimation = _animations[Movement.CurrentAnimation.Idle];
     }
 
     public void Play(CurrentAnimation animation)
     {
-        if (_currentAnimation == _animations[animation])
+        if (CurrentAnimation == _animations[animation])
             return;
-        _currentAnimation = _animations[animation];
+        CurrentAnimation = _animations[animation];
     }
 
     public void Update(IMovable movable, GameTime gameTime)
     {
         switch (movable.CurrentAnimation)
         {
-            case CurrentAnimation.Idle:
-                Play(CurrentAnimation.Idle);
+            case Movement.CurrentAnimation.Idle:
+                Play(Movement.CurrentAnimation.Idle);
                 break;
-            case CurrentAnimation.Run:
-                Play(CurrentAnimation.Run);
+            case Movement.CurrentAnimation.Run:
+                Play(Movement.CurrentAnimation.Run);
                 break;
-            case CurrentAnimation.Hit:
-                Play(CurrentAnimation.Hit);
+            case Movement.CurrentAnimation.Hit:
+                Play(Movement.CurrentAnimation.Hit);
                 break;
-            case CurrentAnimation.Death:
-                Play(CurrentAnimation.Death);
+            case Movement.CurrentAnimation.Death:
+                Play(Movement.CurrentAnimation.Death);
                 break;
             default:
-                Play(CurrentAnimation.Idle);
+                Play(Movement.CurrentAnimation.Idle);
                 break;
         }
 
-        _currentAnimation.Update(gameTime);
+        CurrentAnimation.Update(gameTime);
     }
 
     public void Draw(SpriteBatch spriteBatch, IMovable movable, GameTime gameTime)
@@ -54,6 +56,6 @@ internal class AnimationManager: IAnimationManager
         if (movable.Direction == Direction.Left)
             effect = SpriteEffects.FlipHorizontally;
 
-        _currentAnimation.Draw(spriteBatch, movable.Position, gameTime, effect);
+        CurrentAnimation.Draw(spriteBatch, movable.Position, gameTime, effect);
     }
 }
