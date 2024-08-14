@@ -25,9 +25,9 @@ internal class AnimationManager: IAnimationManager
         CurrentAnimation = _animations[animation];
     }
 
-    public void Update(IMovable movable, GameTime gameTime)
+    public void Update(GameObject gameObject, GameTime gameTime)
     {
-        switch (movable.CurrentAnimation)
+        switch (gameObject.CurrentAnimation)
         {
             case Movement.CurrentAnimation.Idle:
                 Play(Movement.CurrentAnimation.Idle);
@@ -49,13 +49,13 @@ internal class AnimationManager: IAnimationManager
         CurrentAnimation.Update(gameTime);
     }
 
-    public void Draw(SpriteBatch spriteBatch, IMovable movable, GameTime gameTime)
+    public void Draw(SpriteBatch spriteBatch, GameObject gameObject, GameTime gameTime)
     {
         var effect = SpriteEffects.None;
 
-        if (movable.Direction == Direction.Left)
+        if (gameObject.Direction == Direction.Left)
             effect = SpriteEffects.FlipHorizontally;
 
-        CurrentAnimation.Draw(spriteBatch, movable.Position, gameTime, effect);
+        CurrentAnimation.Draw(spriteBatch, gameObject.Position, gameTime, effect);
     }
 }

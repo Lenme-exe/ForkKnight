@@ -37,12 +37,15 @@ namespace ForkKnight.States
         #region Knight
 
         private Knight _knight;
-        private IAnimationManager _animationManager;
+        private IAnimationManager _knightAnimationManager;
         private IMovementManager _movementManager;
         private ICollisionHandler _collisionHandler;
         private IJumpManager _jumpManager;
 
         #endregion
+
+        private GreenSlime _greenSlime;
+        private IAnimationManager _slimeAnimationManager;
 
         public GameState(Game1 game, GraphicsDevice graphicsDevice, ContentManager contentManager) : base(game, graphicsDevice, contentManager)
         {
@@ -80,13 +83,29 @@ namespace ForkKnight.States
             var idleAnimation = new Animation(idleTexture, 32, 32);
             var runAnimation = new Animation(runTexture, 32, 32);
 
-            var animations = new Dictionary<CurrentAnimation, Animation>
+            var knightAnimations = new Dictionary<CurrentAnimation, Animation>
             {
                 { CurrentAnimation.Idle, idleAnimation },
                 { CurrentAnimation.Run, runAnimation }
             };
 
-            _animationManager = new AnimationManager(animations);
+            var greenSlimeSheet = _contentManager.Load<Texture2D>(@"GameObjects\GreenSlime\sheet");
+
+            var greenSlimeAnimations = new Dictionary<CurrentAnimation, Animation>
+            {
+                {
+                    CurrentAnimation.Idle,
+                    new Animation(greenSlimeSheet, 24, 24)
+                },
+                {
+                    CurrentAnimation.Run,
+                    new Animation(greenSlimeSheet, 24, 24)
+                },
+            };
+
+            _slimeAnimationManager = new AnimationManager(greenSlimeAnimations);
+
+            _knightAnimationManager = new AnimationManager(knightAnimations);
 
             #endregion
 
@@ -103,10 +122,16 @@ namespace ForkKnight.States
             _knight = new Knight(
                 _movementManager,
                 _collisionHandler,
-                _animationManager,
+                _knightAnimationManager,
                 new KeyboardReader());
 
             #endregion
+
+            _greenSlime = new GreenSlime(_movementManager, _collisionHandler, _slimeAnimationManager,
+                new KeyboardReader())
+            {
+                Position = new Vector2(300, 1),
+            };
         }
 
         public override void Draw(GameTime gameTime, SpriteBatch spriteBatch)
@@ -116,6 +141,7 @@ namespace ForkKnight.States
             spriteBatch.Draw(_background, new Rectangle(0, 0, _graphicsDevice.Viewport.Width, _graphicsDevice.Viewport.Height), Color.White);
             _tileMapManager.Draw(spriteBatch);
             _knight.Draw(spriteBatch, gameTime);
+            _greenSlime.Draw(spriteBatch, gameTime);
 
             spriteBatch.End();
         }
@@ -128,6 +154,7 @@ namespace ForkKnight.States
         public override void Update(GameTime gameTime)
         {
             _knight.Update(gameTime, _collisionRects);
+            _greenSlime.Update(gameTime, _collisionRects);
 
             if (_knight.Position.Y > _graphicsDevice.Viewport.Height + 100)
             {

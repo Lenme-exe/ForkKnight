@@ -39,6 +39,8 @@ namespace ForkKnight.GameObjects
             _collisionHandler = collisionHandler;
             _animationManager = animationManager;
             InputReader = inputReader;
+
+            Velocity = Vector2.Zero;
         }
 
         public void Update(GameTime gameTime, List<Rectangle> collisionRects)

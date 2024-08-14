@@ -1,5 +1,8 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Linq;
+using System.Text;
+using System.Threading.Tasks;
 using ForkKnight.Animations;
 using ForkKnight.Collisions;
 using ForkKnight.Input;
@@ -9,23 +12,21 @@ using Microsoft.Xna.Framework.Graphics;
 
 namespace ForkKnight.GameObjects
 {
-    internal class Knight : GameObject
+    internal class GreenSlime : GameObject
     {
-        public Knight(
+        public GreenSlime(
             IMovementManager movementManager,
             ICollisionHandler collisionHandler,
             IAnimationManager animationManager,
             IInputReader inputReader) : base(movementManager, collisionHandler, animationManager, inputReader)
         {
-            Position = Vector2.One;
-            Acceleration = 5f;
+            Acceleration = 2f;
             MaxSpeed = 3f;
-            JumpStrength = -10f;
         }
 
         public override void UpdateHitbox()
         {
-            Hitbox = new Rectangle((int)Position.X + 8, (int)Position.Y + 10, 32 - 10, 32 - 4);
+            Hitbox = new Rectangle((int)Position.X + 5, (int)Position.Y + 9, 24 - 5, 24);
         }
     }
 }
