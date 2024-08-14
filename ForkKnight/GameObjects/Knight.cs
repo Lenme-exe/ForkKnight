@@ -17,7 +17,6 @@ namespace ForkKnight.GameObjects
             IAnimationManager animationManager,
             IInputReader inputReader) : base(movementManager, collisionHandler, animationManager, inputReader)
         {
-            Position = Vector2.One;
             Acceleration = 5f;
             MaxSpeed = 3f;
             JumpStrength = -10f;
