@@ -23,7 +23,7 @@ using SpriteBatch = Microsoft.Xna.Framework.Graphics.SpriteBatch;
 
 namespace ForkKnight.States
 {
-    internal class GameState : State
+    internal class Level2State : State
     {
         #region Tilemaps
 
@@ -51,17 +51,17 @@ namespace ForkKnight.States
         #endregion
 
 
-        public GameState(Game1 game, GraphicsDevice graphicsDevice, ContentManager contentManager) : base(game, graphicsDevice, contentManager)
+        public Level2State(Game1 game, GraphicsDevice graphicsDevice, ContentManager contentManager) : base(game, graphicsDevice, contentManager)
         {
             #region Tilemap
 
-            var level1 = new TmxMap(@"Content\Levels\level1.tmx");
-            var tileset = _contentManager.Load<Texture2D>(@"Levels\" + level1.Tilesets[0].Name);
+            var level2 = new TmxMap(@"Content\Levels\level2.tmx");
+            var tileset = _contentManager.Load<Texture2D>(@"Levels\" + level2.Tilesets[0].Name);
             _background = _contentManager.Load<Texture2D>(@"background");
-            var tileWidth = level1.Tilesets[0].TileWidth;
-            var tileHeight = level1.Tilesets[0].TileHeight;
+            var tileWidth = level2.Tilesets[0].TileWidth;
+            var tileHeight = level2.Tilesets[0].TileHeight;
             var tileSetTilesWide = tileset.Width / tileWidth;
-            _tileMapManager = new TileMapManager(level1, tileset, tileSetTilesWide, tileWidth, tileHeight);
+            _tileMapManager = new TileMapManager(level2, tileset, tileSetTilesWide, tileWidth, tileHeight);
 
             #endregion
 
@@ -69,7 +69,7 @@ namespace ForkKnight.States
 
             var collisionRects = new List<Rectangle>();
 
-            foreach (var o in level1.ObjectGroups["Collision"].Objects)
+            foreach (var o in level2.ObjectGroups["Collision"].Objects)
                 collisionRects.Add(new Rectangle((int)o.X, (int)o.Y, (int)o.Width, (int)o.Height));
 
             #endregion
@@ -120,17 +120,10 @@ namespace ForkKnight.States
 
             _greenSlimes = new List<GameObject>();
 
-            var limitBoxes = new List<Rectangle>();
-
-            foreach (var rect in level1.ObjectGroups["EnemyLimit"].Objects)
-            {
-                limitBoxes.Add(new Rectangle((int) rect.X, (int) rect.Y, (int) rect.Width, (int) rect.Height));
-            }
-
-            foreach (var o in level1.ObjectGroups["GreenSlime"].Objects)
+            foreach (var o in level2.ObjectGroups["GreenSlime"].Objects)
             {
                 _greenSlimes.Add(new GreenSlime(movementManager, collisionHandler, slimeAnimationManager,
-                    new GreenSlimeMovement(), limitBoxes)
+                    new GreenSlimeMovement())
                 {
                     Position = new Vector2((int)o.X, (int)o.Y - (int)o.Height)
                 });
@@ -142,7 +135,7 @@ namespace ForkKnight.States
 
             var spawnPosKnight = Vector2.One;
 
-            foreach (var o in level1.ObjectGroups["Spawn"].Objects)
+            foreach (var o in level2.ObjectGroups["Spawn"].Objects)
                 spawnPosKnight = new Vector2((int)o.X, (int)o.Y - (int)o.Height);
 
             _knight = new Knight(
@@ -160,21 +153,25 @@ namespace ForkKnight.States
 
             #region coins
 
-            _coins = new List<GameObject>();
+            //_coins = new List<GameObject>();
 
-            foreach (var o in level1.ObjectGroups["Coins"].Objects)
-            {
-                //_greenSlimes.Add(new Coin())
-                //{
-                //    Position = new Vector2((int)o.X, (int)o.Y - (int)o.Height)
-                //});
-            }
+            //foreach (var o in level2.ObjectGroups["Coins"].Objects)
+            //{
+            //    _greenSlimes.Add(new Coin())
+            //    {
+            //        Position = new Vector2((int)o.X, (int)o.Y - (int)o.Height)
+            //    });
+            //}
 
             #endregion
         }
 
         public override void Draw(GameTime gameTime, SpriteBatch spriteBatch)
         {
+            Texture2D texture;
+
+            texture = new Texture2D(_graphicsDevice, 1, 1);
+            texture.SetData(new Color[] {Color.Red});
             spriteBatch.Begin();
 
             spriteBatch.Draw(_background, new Rectangle(0, 0, _graphicsDevice.Viewport.Width, _graphicsDevice.Viewport.Height), Color.White);
