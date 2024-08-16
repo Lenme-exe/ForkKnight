@@ -148,10 +148,6 @@ namespace ForkKnight.States
 
         public override void Draw(GameTime gameTime, SpriteBatch spriteBatch)
         {
-            Texture2D texture;
-
-            texture = new Texture2D(_graphicsDevice, 1, 1);
-            texture.SetData(new Color[] {Color.Red});
             spriteBatch.Begin();
 
             spriteBatch.Draw(_background, new Rectangle(0, 0, _graphicsDevice.Viewport.Width, _graphicsDevice.Viewport.Height), Color.White);
