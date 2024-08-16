@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<map version="1.10" tiledversion="1.10.2" orientation="orthogonal" renderorder="right-down" width="48" height="24" tilewidth="16" tileheight="16" infinite="0" nextlayerid="12" nextobjectid="32">
+<map version="1.10" tiledversion="1.10.2" orientation="orthogonal" renderorder="right-down" width="48" height="24" tilewidth="16" tileheight="16" infinite="0" nextlayerid="13" nextobjectid="33">
  <tileset firstgid="1" name="world_tileset" tilewidth="16" tileheight="16" tilecount="256" columns="16">
   <image source="world_tileset.png" width="256" height="256"/>
  </tileset>
@@ -79,6 +79,9 @@
   <object id="14" x="304" y="160" width="16" height="16"/>
   <object id="15" x="592" y="48" width="16" height="16"/>
   <object id="16" x="624" y="224" width="16" height="16"/>
+ </objectgroup>
+ <objectgroup id="12" name="PurpleSlime">
+  <object id="32" x="432" y="192" width="16" height="16"/>
  </objectgroup>
  <objectgroup id="8" name="Spawn">
   <object id="17" x="16" y="240" width="16" height="16"/>

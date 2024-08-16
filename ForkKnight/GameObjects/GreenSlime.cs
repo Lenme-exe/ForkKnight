@@ -35,7 +35,6 @@ namespace ForkKnight.GameObjects
             bool collidedLeft = CheckCollisionWithLeftBoundary();
             bool collidedRight = CheckCollisionWithRightBoundary();
 
-            // Update the enemy's input based on collisions
             var inputReader = InputReader as GreenSlimeMovement;
             if (inputReader != null)
             {
@@ -55,7 +54,6 @@ namespace ForkKnight.GameObjects
 
         private bool CheckCollisionWithLeftBoundary()
         {
-            // Example logic, adjust according to your game's needs
             foreach (var rect in _limitRectangles)
             {
                 if (rect.Intersects(Hitbox))
@@ -74,7 +72,6 @@ namespace ForkKnight.GameObjects
 
         private bool CheckCollisionWithRightBoundary()
         {
-            // Example logic, adjust according to your game's needs
             foreach (var rect in _limitRectangles)
             {
                 if (rect.Intersects(Hitbox))
@@ -82,7 +79,7 @@ namespace ForkKnight.GameObjects
                     if (Velocity.X > 0 && Hitbox.Right > rect.Left &&
                         Hitbox.Left < rect.Left)
                     {
-                        Position = new Vector2(rect.Left - Hitbox.Width - HitboxOffsetX, Position.Y); //kanker
+                        Position = new Vector2(rect.Left - Hitbox.Width - HitboxOffsetX, Position.Y);
                         Velocity = new Vector2(0, Velocity.Y);
                         return true;
                     }

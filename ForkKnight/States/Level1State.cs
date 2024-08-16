@@ -41,6 +41,7 @@ namespace ForkKnight.States
         #region Enemies
 
         private List<GameObject> _greenSlimes;
+        private List<GameObject> _purpleSlimes;
 
         #endregion
 
@@ -102,7 +103,23 @@ namespace ForkKnight.States
                 },
             };
 
-            IAnimationManager slimeAnimationManager = new AnimationManager(greenSlimeAnimations);
+            var purpleSlimeSheet = _contentManager.Load<Texture2D>(@"GameObjects\PurpleSlime\sheet");
+
+            var purpleSlimeAnimations = new Dictionary<CurrentAnimation, Animation>
+            {
+                {
+                    CurrentAnimation.Idle,
+                    new Animation(purpleSlimeSheet, 24, 24)
+                },
+                {
+                    CurrentAnimation.Run,
+                    new Animation(purpleSlimeSheet, 24, 24)
+                },
+            };
+
+            IAnimationManager greenSlimeAnimationManager = new AnimationManager(greenSlimeAnimations);
+
+            IAnimationManager purpleSlimeAnimationManager = new AnimationManager(purpleSlimeAnimations);
 
             IAnimationManager knightAnimationManager = new AnimationManager(knightAnimations);
 
@@ -118,6 +135,8 @@ namespace ForkKnight.States
 
             #region Enemies
 
+            var enemies = new List<GameObject>(); 
+
             _greenSlimes = new List<GameObject>();
 
             var limitBoxes = new List<Rectangle>();
@@ -129,12 +148,25 @@ namespace ForkKnight.States
 
             foreach (var o in level1.ObjectGroups["GreenSlime"].Objects)
             {
-                _greenSlimes.Add(new GreenSlime(movementManager, collisionHandler, slimeAnimationManager,
+                _greenSlimes.Add(new GreenSlime(movementManager, collisionHandler, greenSlimeAnimationManager,
                     new GreenSlimeMovement(), limitBoxes)
                 {
                     Position = new Vector2((int)o.X, (int)o.Y - (int)o.Height)
                 });
             }
+
+            _purpleSlimes = new List<GameObject>();
+
+            foreach (var o in level1.ObjectGroups["PurpleSlime"].Objects)
+            {
+                _purpleSlimes.Add(new PurpleSlime(movementManager, collisionHandler, purpleSlimeAnimationManager, new KeyboardReader())
+                {
+                    Position = new Vector2((int)o.X, (int)o.Y - (int)o.Height)
+                });
+            }
+
+            enemies.AddRange(_greenSlimes);
+            enemies.AddRange(_purpleSlimes);
 
             #endregion
 
@@ -151,7 +183,7 @@ namespace ForkKnight.States
                 knightAnimationManager,
                 new KeyboardReader(),
                 enemyCollisionHandler,
-                _greenSlimes)
+                enemies)
             {
                 Position = spawnPosKnight
             };
@@ -178,13 +210,17 @@ namespace ForkKnight.States
             spriteBatch.Begin();
 
             spriteBatch.Draw(_background, new Rectangle(0, 0, _graphicsDevice.Viewport.Width, _graphicsDevice.Viewport.Height), Color.White);
-            _tileMapManager.Draw(spriteBatch);
-            _knight.Draw(spriteBatch, gameTime);
-            foreach (var greenSlime in _greenSlimes)
-            {
-                greenSlime.Draw(spriteBatch, gameTime);
-            }
 
+            _tileMapManager.Draw(spriteBatch);
+
+            _knight.Draw(spriteBatch, gameTime);
+
+            foreach (var greenSlime in _greenSlimes)
+                greenSlime.Draw(spriteBatch, gameTime);
+
+            foreach (var purpleSlime in _purpleSlimes)
+                purpleSlime.Draw(spriteBatch, gameTime);
+            
             spriteBatch.End();
         }
 
@@ -197,9 +233,10 @@ namespace ForkKnight.States
         {
             _knight.Update(gameTime);
             foreach (var greenSlime in _greenSlimes)
-            {
                 greenSlime.Update(gameTime);
-            }
+            
+            foreach(var purpleSlime in _purpleSlimes)
+                purpleSlime.Update(gameTime);
 
             if (_knight.Position.Y > _graphicsDevice.Viewport.Height + 100 || _knight.IsDestroyed)
             {
