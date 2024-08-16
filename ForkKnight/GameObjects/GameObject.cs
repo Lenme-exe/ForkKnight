@@ -14,6 +14,8 @@ namespace ForkKnight.GameObjects
 {
     internal abstract class GameObject : IGameObject, IMovable
     {
+        public int HitboxOffsetX { get; set; } = 0;
+        public int HitboxOffsetY { get; set; } = 0;
         public Rectangle Hitbox { get; set; }
         public Vector2 Position { get; set; }
         public Vector2 Velocity { get; set; }

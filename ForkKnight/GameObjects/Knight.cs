@@ -21,6 +21,8 @@ namespace ForkKnight.GameObjects
             IEnemyCollisionHandler enemyCollisionHandler,
             List<GameObject> enemies) : base(movementManager, collisionHandler, animationManager, inputReader)
         {
+            HitboxOffsetX = 9;
+            HitboxOffsetY = 9;
             _enemyCollisionHandler = enemyCollisionHandler;
             _enemies = enemies;
             Acceleration = 5f;
@@ -36,8 +38,8 @@ namespace ForkKnight.GameObjects
 
         public override void UpdateHitbox()
         {
-            int hitboxWidth = 32 - 10 - 10;  // Width = 12
-            int hitboxHeight = 32 - 10 - 4;  // Height = 18
+            var hitboxWidth = 32 - 10 - 10;
+            var hitboxHeight = 32 - 10 - 4;
 
             Hitbox = new Rectangle((int)Position.X + 10, (int)Position.Y +10, hitboxWidth, hitboxHeight);
         }
