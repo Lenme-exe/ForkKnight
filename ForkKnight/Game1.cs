@@ -37,7 +37,7 @@ namespace ForkKnight
         {
             _spriteBatch = new SpriteBatch(GraphicsDevice);
 
-            _currentState = new GameState(this, _graphics.GraphicsDevice, Content);
+            _currentState = new MenuState(this, _graphics.GraphicsDevice, Content);
         }
 
         protected override void Update(GameTime gameTime)

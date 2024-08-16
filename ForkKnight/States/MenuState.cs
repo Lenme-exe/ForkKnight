@@ -8,45 +8,45 @@ using Microsoft.Xna.Framework.Graphics;
 
 namespace ForkKnight.States
 {
-    internal class DeathState : State
+    internal class MenuState : State
     {
         private List<Component> _components;
         private SpriteFont _font;
         private Texture2D _background;
-        public DeathState(Game1 game, GraphicsDevice graphicsDevice, ContentManager contentManager) : base(game, graphicsDevice, contentManager)
+        public MenuState(Game1 game, GraphicsDevice graphicsDevice, ContentManager contentManager) : base(game, graphicsDevice, contentManager)
         {
             var buttonTexture = _contentManager.Load<Texture2D>(@"UI\button");
             _font = _contentManager.Load<SpriteFont>(@"UI\font");
 
             _background = _contentManager.Load<Texture2D>(@"background");
 
-            var image = _contentManager.Load<Texture2D>(@"UI\death-image");
+            var image = _contentManager.Load<Texture2D>(@"UI\main-menu-sprite");
 
-            var restartButton = new Button(buttonTexture, _font)
+            var startButton = new Button(buttonTexture, _font)
             {
                 Position = new Vector2(_graphicsDevice.Viewport.Width / 2 - buttonTexture.Width / 2, 250),
-                Text = "Restart",
+                Text = "Play",
             };
 
-            var mainMenuButton = new Button(buttonTexture, _font)
+            var quitButton = new Button(buttonTexture, _font)
             {
                 Position = new Vector2(_graphicsDevice.Viewport.Width / 2 - buttonTexture.Width / 2, 320),
-                Text = "Main menu",
+                Text = "Quit",
             };
 
-            var deathImage = new Image(image)
+            var mainImage = new Image(image)
             {
-                DestinationRectangle = new Rectangle(_graphicsDevice.Viewport.Width / 2 - 32, 200, 64, 48),
+                DestinationRectangle = new Rectangle(_graphicsDevice.Viewport.Width / 2 - 64, 120, 128, 128),
             };
 
-            restartButton.Click += RestartButtonOnClick;
-            mainMenuButton.Click += MainMenuButtonOnClick;
+            startButton.Click += StartButtonOnClick;
+            quitButton.Click += QuitButtonOnClick;
 
             _components = new List<Component>()
             {
-                restartButton,
-                mainMenuButton,
-                deathImage
+                startButton,
+                quitButton,
+                mainImage
             };
         }
 
@@ -56,7 +56,7 @@ namespace ForkKnight.States
 
             spriteBatch.Draw(_background, new Rectangle(0, 0, _graphicsDevice.Viewport.Width, _graphicsDevice.Viewport.Height), Color.White);
 
-            spriteBatch.DrawString(_font, "Game Over", new Vector2(_graphicsDevice.Viewport.Width / 2 - _font.MeasureString("Game Over").Length() / 2, 150), Color.White);
+            spriteBatch.DrawString(_font, "ForkKnight", new Vector2(_graphicsDevice.Viewport.Width / 2 - _font.MeasureString("Game Over").Length() / 2, 120), Color.White);
 
             foreach (var c in _components)
                 c.Draw(gameTime, spriteBatch);
@@ -75,15 +75,14 @@ namespace ForkKnight.States
                 component.Update(gameTime);
         }
 
-        private void RestartButtonOnClick(object sender, EventArgs e)
+        private void StartButtonOnClick(object sender, EventArgs e)
         {
             _game.ChangeState(new GameState(_game, _graphicsDevice, _contentManager));
         }
 
-        private void MainMenuButtonOnClick(object sender, EventArgs e)
+        private void QuitButtonOnClick(object sender, EventArgs e)
         {
-            _game.ChangeState(new MenuState(_game, _graphicsDevice, _contentManager));
-
+            this._game.Exit();
         }
     }
 }
