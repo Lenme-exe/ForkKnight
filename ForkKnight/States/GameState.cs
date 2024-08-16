@@ -156,12 +156,10 @@ namespace ForkKnight.States
 
             spriteBatch.Draw(_background, new Rectangle(0, 0, _graphicsDevice.Viewport.Width, _graphicsDevice.Viewport.Height), Color.White);
             _tileMapManager.Draw(spriteBatch);
-            spriteBatch.Draw(texture, _knight.Hitbox, Color.White);
             _knight.Draw(spriteBatch, gameTime);
             foreach (var greenSlime in _greenSlimes)
             {
                 greenSlime.Draw(spriteBatch, gameTime);
-                spriteBatch.Draw(texture, greenSlime.Hitbox, Color.White);
             }
 
             spriteBatch.End();

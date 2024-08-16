@@ -20,13 +20,18 @@ namespace ForkKnight.GameObjects
             IAnimationManager animationManager,
             IInputReader inputReader) : base(movementManager, collisionHandler, animationManager, inputReader)
         {
+            HitboxOffsetX = 4;
+            HitboxOffsetY = 8;
             Acceleration = 2f;
             MaxSpeed = 3f;
         }
 
         public override void UpdateHitbox()
         {
-            Hitbox = new Rectangle((int)Position.X + 5, (int)Position.Y + 9, 24 - 5 - 5, 24 - 9);
+            var hitboxWidth = 24 - 5 - 5;
+            var hitboxHeight = 24 - 9;
+
+            Hitbox = new Rectangle((int)Position.X + 5, (int)Position.Y + 9, hitboxWidth, hitboxHeight);
         }
     }
 }
