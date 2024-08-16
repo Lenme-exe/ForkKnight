@@ -7,6 +7,7 @@ using System.Text;
 using System.Threading.Tasks;
 using ForkKnight.Animations;
 using ForkKnight.Collisions;
+using ForkKnight.Collisions.Responders;
 using ForkKnight.GameObjects;
 using ForkKnight.Input;
 using ForkKnight.Levels;
@@ -22,14 +23,11 @@ using SpriteBatch = Microsoft.Xna.Framework.Graphics.SpriteBatch;
 
 namespace ForkKnight.States
 {
-    internal class GameState: State
+    internal class GameState : State
     {
         #region Tilemaps
 
         private TileMapManager _tileMapManager;
-        private TmxMap _level1;
-        private Texture2D _tileset;
-        private List<Rectangle> _collisionRects;
         private Texture2D _background;
 
         #endregion
@@ -37,36 +35,36 @@ namespace ForkKnight.States
         #region Knight
 
         private Knight _knight;
-        private IAnimationManager _knightAnimationManager;
-        private IMovementManager _movementManager;
-        private ICollisionHandler _collisionHandler;
-        private IJumpManager _jumpManager;
 
         #endregion
 
-        private List<GreenSlime> _greenSlimes;
-        private IAnimationManager _slimeAnimationManager;
+        #region Enemies
+
+        private List<GameObject> _greenSlimes;
+
+        #endregion
+
 
         public GameState(Game1 game, GraphicsDevice graphicsDevice, ContentManager contentManager) : base(game, graphicsDevice, contentManager)
         {
             #region Tilemap
 
-            _level1 = new TmxMap(@"Content\Levels\level1.tmx");
-            _tileset = _contentManager.Load<Texture2D>(@"Levels\" + _level1.Tilesets[0].Name);
+            var level1 = new TmxMap(@"Content\Levels\level1.tmx");
+            var tileset = _contentManager.Load<Texture2D>(@"Levels\" + level1.Tilesets[0].Name);
             _background = _contentManager.Load<Texture2D>(@"background");
-            var tileWidth = _level1.Tilesets[0].TileWidth;
-            var tileHeight = _level1.Tilesets[0].TileHeight;
-            var tileSetTilesWide = _tileset.Width / tileWidth;
-            _tileMapManager = new TileMapManager(_level1, _tileset, tileSetTilesWide, tileWidth, tileHeight);
+            var tileWidth = level1.Tilesets[0].TileWidth;
+            var tileHeight = level1.Tilesets[0].TileHeight;
+            var tileSetTilesWide = tileset.Width / tileWidth;
+            _tileMapManager = new TileMapManager(level1, tileset, tileSetTilesWide, tileWidth, tileHeight);
 
             #endregion
 
             #region Collisions
 
-            _collisionRects = new List<Rectangle>();
+            var collisionRects = new List<Rectangle>();
 
-            foreach (var o in _level1.ObjectGroups["Collision"].Objects)
-                _collisionRects.Add(new Rectangle((int)o.X, (int)o.Y, (int)o.Width, (int)o.Height));
+            foreach (var o in level1.ObjectGroups["Collision"].Objects)
+                collisionRects.Add(new Rectangle((int)o.X, (int)o.Y, (int)o.Width, (int)o.Height));
 
             #endregion
 
@@ -98,60 +96,72 @@ namespace ForkKnight.States
                 },
             };
 
-            _slimeAnimationManager = new AnimationManager(greenSlimeAnimations);
+            IAnimationManager slimeAnimationManager = new AnimationManager(greenSlimeAnimations);
 
-            _knightAnimationManager = new AnimationManager(knightAnimations);
+            IAnimationManager knightAnimationManager = new AnimationManager(knightAnimations);
 
             #endregion
 
             #region MovementManager and CollisionHandler
 
-            _jumpManager = new JumpManager();
-            _movementManager = new MovementManager(_jumpManager);
-            _collisionHandler = new CollisionHandler();
+            var movementManager = new MovementManager(new JumpManager());
+            var collisionHandler = new CollisionHandler(new SolidObjectCollisionResponder(), collisionRects);
+            var enemyCollisionHandler = new EnemyCollisionHandler(new EnemyCollisionResponder());
+
+            #endregion
+
+            #region Enemies
+
+            _greenSlimes = new List<GameObject>();
+
+            foreach (var o in level1.ObjectGroups["GreenSlime"].Objects)
+            {
+                _greenSlimes.Add(new GreenSlime(movementManager, collisionHandler, slimeAnimationManager,
+                    new GreenSlimeMovement())
+                {
+                    Position = new Vector2((int)o.X, (int)o.Y - (int)o.Height)
+                });
+            }
 
             #endregion
 
             #region Knight
 
-            Vector2 spawnPos = Vector2.One;
+            var spawnPos = Vector2.One;
 
-            foreach (var o in _level1.ObjectGroups["Spawn"].Objects)
+            foreach (var o in level1.ObjectGroups["Spawn"].Objects)
                 spawnPos = new Vector2((int)o.X, (int)o.Y - (int)o.Height);
 
             _knight = new Knight(
-                _movementManager,
-                _collisionHandler,
-                _knightAnimationManager,
-                new KeyboardReader())
+                movementManager,
+                collisionHandler,
+                knightAnimationManager,
+                new KeyboardReader(),
+                enemyCollisionHandler,
+                _greenSlimes)
             {
                 Position = spawnPos
             };
 
-
             #endregion
-            _greenSlimes = new List<GreenSlime>();
-
-            foreach (var o in _level1.ObjectGroups["GreenSlime"].Objects)
-            {
-                _greenSlimes.Add(new GreenSlime(_movementManager, _collisionHandler, _slimeAnimationManager,
-                    new KeyboardReader())
-                {
-                    Position = new Vector2((int)o.X, (int)o.Y - (int)o.Height)
-                });
-            }
         }
 
         public override void Draw(GameTime gameTime, SpriteBatch spriteBatch)
         {
+            Texture2D texture;
+
+            texture = new Texture2D(_graphicsDevice, 1, 1);
+            texture.SetData(new Color[] {Color.Red});
             spriteBatch.Begin();
 
             spriteBatch.Draw(_background, new Rectangle(0, 0, _graphicsDevice.Viewport.Width, _graphicsDevice.Viewport.Height), Color.White);
             _tileMapManager.Draw(spriteBatch);
+            spriteBatch.Draw(texture, _knight.Hitbox, Color.White);
             _knight.Draw(spriteBatch, gameTime);
             foreach (var greenSlime in _greenSlimes)
             {
                 greenSlime.Draw(spriteBatch, gameTime);
+                spriteBatch.Draw(texture, greenSlime.Hitbox, Color.White);
             }
 
             spriteBatch.End();
@@ -159,18 +169,18 @@ namespace ForkKnight.States
 
         public override void PostUpdate(GameTime gameTime)
         {
-            
+
         }
 
         public override void Update(GameTime gameTime)
         {
-            _knight.Update(gameTime, _collisionRects);
+            _knight.Update(gameTime);
             foreach (var greenSlime in _greenSlimes)
             {
-                greenSlime.Update(gameTime, _collisionRects);
+                greenSlime.Update(gameTime);
             }
 
-            if (_knight.Position.Y > _graphicsDevice.Viewport.Height + 100)
+            if (_knight.Position.Y > _graphicsDevice.Viewport.Height + 100 || _knight.IsDestroyed)
             {
                 _game.ChangeState(new DeathState(_game, _graphicsDevice, _contentManager));
             }

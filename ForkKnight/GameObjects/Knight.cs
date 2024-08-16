@@ -11,20 +11,35 @@ namespace ForkKnight.GameObjects
 {
     internal class Knight : GameObject
     {
+        private readonly IEnemyCollisionHandler _enemyCollisionHandler;
+        private readonly List<GameObject> _enemies;
         public Knight(
             IMovementManager movementManager,
             ICollisionHandler collisionHandler,
             IAnimationManager animationManager,
-            IInputReader inputReader) : base(movementManager, collisionHandler, animationManager, inputReader)
+            IInputReader inputReader,
+            IEnemyCollisionHandler enemyCollisionHandler,
+            List<GameObject> enemies) : base(movementManager, collisionHandler, animationManager, inputReader)
         {
+            _enemyCollisionHandler = enemyCollisionHandler;
+            _enemies = enemies;
             Acceleration = 5f;
             MaxSpeed = 3f;
             JumpStrength = -10f;
         }
 
+        public override void Update(GameTime gameTime)
+        {
+            base.Update(gameTime);
+            _enemyCollisionHandler.CheckCollision(this, _enemies);
+        }
+
         public override void UpdateHitbox()
         {
-            Hitbox = new Rectangle((int)Position.X + 8, (int)Position.Y + 10, 32 - 10, 32 - 4);
+            int hitboxWidth = 32 - 10 - 10;  // Width = 12
+            int hitboxHeight = 32 - 10 - 4;  // Height = 18
+
+            Hitbox = new Rectangle((int)Position.X + 10, (int)Position.Y +10, hitboxWidth, hitboxHeight);
         }
     }
 }

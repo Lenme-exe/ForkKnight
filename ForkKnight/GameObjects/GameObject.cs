@@ -25,16 +25,18 @@ namespace ForkKnight.GameObjects
         public float JumpStrength { get; set; }
         public bool IsFalling { get; set; }
         public bool IsJumping { get; set; }
+        public bool IsDestroyed { get; private set; }
 
         private readonly IMovementManager _movementManager;
         private readonly ICollisionHandler _collisionHandler;
         private readonly IAnimationManager _animationManager;
 
-        public GameObject(IMovementManager movementManager,
+        protected GameObject(IMovementManager movementManager,
             ICollisionHandler collisionHandler,
             IAnimationManager animationManager,
             IInputReader inputReader)
         {
+            IsDestroyed = false;
             _movementManager = movementManager;
             _collisionHandler = collisionHandler;
             _animationManager = animationManager;
@@ -43,24 +45,34 @@ namespace ForkKnight.GameObjects
             Velocity = Vector2.Zero;
         }
 
-        public void Update(GameTime gameTime, List<Rectangle> collisionRects)
+        public virtual void Update(GameTime gameTime)
         {
-            _movementManager.Move(this, gameTime);
-            _collisionHandler.CheckCollision(this, collisionRects);
-            _animationManager.Update(this, gameTime);
-            UpdateHitbox();
+            if (!IsDestroyed)
+            {
+                _movementManager.Move(this, gameTime);
+                _collisionHandler.CheckCollision(this);
+                _animationManager.Update(this, gameTime);
+                UpdateHitbox();
+            }
         }
 
-        public void Draw(SpriteBatch spriteBatch, GameTime gameTime)
+        public virtual void Draw(SpriteBatch spriteBatch, GameTime gameTime)
         {
-            _animationManager.Draw(spriteBatch, this, gameTime);
+            if (!IsDestroyed)
+                _animationManager.Draw(spriteBatch, this, gameTime);
         }
 
         public virtual void UpdateHitbox()
         {
-            Hitbox = new Rectangle((int)Position.X, (int)Position.Y, 
+            Hitbox = new Rectangle((int)Position.X, (int)Position.Y,
                 _animationManager.CurrentAnimation.CurrentFrame.SourceRectangle.Width,
                 _animationManager.CurrentAnimation.CurrentFrame.SourceRectangle.Height);
+        }
+
+        public virtual void Destroy()
+        {
+            Hitbox = Rectangle.Empty;
+            IsDestroyed = true;
         }
     }
 }

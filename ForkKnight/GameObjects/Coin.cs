@@ -22,7 +22,7 @@ namespace ForkKnight.GameObjects
             _animation = new Animation(texture, 16, 16);
         }
 
-        public void Update(GameTime gameTime, List<Rectangle> collisionRects)
+        public void Update(GameTime gameTime)
         {
             throw new NotImplementedException();
         }

@@ -26,7 +26,7 @@ namespace ForkKnight.GameObjects
 
         public override void UpdateHitbox()
         {
-            Hitbox = new Rectangle((int)Position.X + 5, (int)Position.Y + 9, 24 - 5, 24);
+            Hitbox = new Rectangle((int)Position.X + 5, (int)Position.Y + 9, 24 - 5 - 5, 24 - 9);
         }
     }
 }
