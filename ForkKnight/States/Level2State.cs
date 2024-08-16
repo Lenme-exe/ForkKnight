@@ -118,12 +118,19 @@ namespace ForkKnight.States
 
             #region Enemies
 
+            var limitBoxes = new List<Rectangle>();
+
+            foreach (var rect in level2.ObjectGroups["EnemyLimit"].Objects)
+            {
+                limitBoxes.Add(new Rectangle((int)rect.X, (int)rect.Y, (int)rect.Width, (int)rect.Height));
+            }
+
             _greenSlimes = new List<GameObject>();
 
             foreach (var o in level2.ObjectGroups["GreenSlime"].Objects)
             {
                 _greenSlimes.Add(new GreenSlime(movementManager, collisionHandler, slimeAnimationManager,
-                    new GreenSlimeMovement())
+                    new GreenSlimeMovement(), limitBoxes)
                 {
                     Position = new Vector2((int)o.X, (int)o.Y - (int)o.Height)
                 });
