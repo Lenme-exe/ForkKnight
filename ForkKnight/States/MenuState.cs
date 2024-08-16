@@ -77,7 +77,7 @@ namespace ForkKnight.States
 
         private void StartButtonOnClick(object sender, EventArgs e)
         {
-            _game.ChangeState(new GameState(_game, _graphicsDevice, _contentManager));
+            _game.ChangeState(new Level2State(_game, _graphicsDevice, _contentManager));
         }
 
         private void QuitButtonOnClick(object sender, EventArgs e)

@@ -23,7 +23,7 @@ using SpriteBatch = Microsoft.Xna.Framework.Graphics.SpriteBatch;
 
 namespace ForkKnight.States
 {
-    internal class GameState : State
+    internal class Level1State : State
     {
         #region Tilemaps
 
@@ -51,7 +51,7 @@ namespace ForkKnight.States
         #endregion
 
 
-        public GameState(Game1 game, GraphicsDevice graphicsDevice, ContentManager contentManager) : base(game, graphicsDevice, contentManager)
+        public Level1State(Game1 game, GraphicsDevice graphicsDevice, ContentManager contentManager) : base(game, graphicsDevice, contentManager)
         {
             #region Tilemap
 
@@ -153,15 +153,15 @@ namespace ForkKnight.States
 
             #region coins
 
-            _coins = new List<GameObject>();
+            //_coins = new List<GameObject>();
 
-            foreach (var o in level1.ObjectGroups["Coins"].Objects)
-            {
-                //_greenSlimes.Add(new Coin())
-                //{
-                //    Position = new Vector2((int)o.X, (int)o.Y - (int)o.Height)
-                //});
-            }
+            //foreach (var o in level1.ObjectGroups["Coins"].Objects)
+            //{
+            //    _greenSlimes.Add(new Coin())
+            //    {
+            //        Position = new Vector2((int)o.X, (int)o.Y - (int)o.Height)
+            //    });
+            //}
 
             #endregion
         }
