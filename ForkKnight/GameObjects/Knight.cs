@@ -9,59 +9,39 @@ using Microsoft.Xna.Framework.Graphics;
 
 namespace ForkKnight.GameObjects
 {
-    internal class Knight : IGameObject, IMovable
+    internal class Knight : GameObject
     {
-        public Vector2 Position { get; set; }
-        public Vector2 Velocity { get; set; }
-        public IInputReader InputReader { get; set; }
-        public CurrentAnimation CurrentAnimation { get; set; }
-        public Direction Direction { get; set; }
-        public float Acceleration { get; set; }
-        public float MaxSpeed { get; set; }
-        public float JumpStrength { get; set; }
-        public Rectangle Hitbox { get; set; }
-        public bool IsFalling { get; set; }
-        public bool IsJumping { get; set; }
-
-        private readonly IMovementManager _movementManager;
-        private readonly ICollisionHandler _collisionHandler;
-        private readonly IAnimationManager _animationManager;
-
+        private readonly IEnemyCollisionHandler _enemyCollisionHandler;
+        private readonly List<GameObject> _enemies;
         public Knight(
             IMovementManager movementManager,
             ICollisionHandler collisionHandler,
             IAnimationManager animationManager,
-            IInputReader inputReader)
+            IInputReader inputReader,
+            IEnemyCollisionHandler enemyCollisionHandler,
+            List<GameObject> enemies) : base(movementManager, collisionHandler, animationManager, inputReader)
         {
-            _movementManager = movementManager;
-            _collisionHandler = collisionHandler;
-            _animationManager = animationManager;
-            InputReader = inputReader;
-
-            Position = Vector2.One;
-            Velocity = Vector2.Zero;
+            HitboxOffsetX = 9;
+            HitboxOffsetY = 9;
+            _enemyCollisionHandler = enemyCollisionHandler;
+            _enemies = enemies;
             Acceleration = 5f;
             MaxSpeed = 3f;
             JumpStrength = -10f;
-            UpdateHitbox();
         }
 
-        public void Update(GameTime gameTime, List<Rectangle> collisionRects)
+        public override void Update(GameTime gameTime)
         {
-            _movementManager.Move(this, gameTime);
-            _collisionHandler.CheckCollision(this, collisionRects);
-            _animationManager.Update(this, gameTime);
-            UpdateHitbox();
+            base.Update(gameTime);
+            _enemyCollisionHandler.CheckCollision(this, _enemies);
         }
 
-        public void Draw(SpriteBatch spriteBatch, GameTime gameTime)
+        public override void UpdateHitbox()
         {
-            _animationManager.Draw(spriteBatch, this, gameTime);
-        }
+            var hitboxWidth = 32 - 10 - 10;
+            var hitboxHeight = 32 - 10 - 4;
 
-        private void UpdateHitbox()
-        {
-            Hitbox = new Rectangle((int)Position.X + 8, (int)Position.Y + 10, 32 - 10, 32 - 4);
+            Hitbox = new Rectangle((int)Position.X + 10, (int)Position.Y +10, hitboxWidth, hitboxHeight);
         }
     }
 }

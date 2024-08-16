@@ -77,7 +77,14 @@ namespace ForkKnight.States
 
         private void RestartButtonOnClick(object sender, EventArgs e)
         {
-            _game.ChangeState(new GameState(_game, _graphicsDevice, _contentManager));
+            if (_game._previousState is Level1State)
+            {
+                _game.ChangeState(new Level1State(_game, _graphicsDevice, _contentManager));
+            }
+            else if (_game._previousState is Level2State)
+            {
+                _game.ChangeState(new Level2State(_game, _graphicsDevice, _contentManager));
+            }
         }
 
         private void MainMenuButtonOnClick(object sender, EventArgs e)

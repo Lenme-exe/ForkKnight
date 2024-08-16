@@ -20,6 +20,7 @@ namespace ForkKnight
 
         private State _currentState;
         private State _nextState;
+        public State _previousState;
 
         public Game1()
         {
@@ -44,6 +45,8 @@ namespace ForkKnight
         {
             if (_nextState != null)
             {
+                _previousState = _currentState;
+
                 _currentState = _nextState;
 
                 _nextState = null;

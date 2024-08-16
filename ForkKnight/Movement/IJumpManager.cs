@@ -1,5 +1,4 @@
-﻿using ForkKnight.GameObjects;
-using Microsoft.Xna.Framework;
+﻿using Microsoft.Xna.Framework;
 
 namespace ForkKnight.Movement;
 

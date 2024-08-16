@@ -1,6 +1,6 @@
 ﻿using Microsoft.Xna.Framework;
 
-namespace ForkKnight.GameObjects;
+namespace ForkKnight.Collisions;
 
 public interface ICollidable
 {

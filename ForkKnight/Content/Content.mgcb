@@ -37,6 +37,18 @@
 /processorParam:TextureFormat=Color
 /build:GameObjects/Coin/coin.png
 
+#begin GameObjects/GreenSlime/sheet.png
+/importer:TextureImporter
+/processor:TextureProcessor
+/processorParam:ColorKeyColor=255,0,255,255
+/processorParam:ColorKeyEnabled=True
+/processorParam:GenerateMipmaps=False
+/processorParam:PremultiplyAlpha=True
+/processorParam:ResizeToPowerOfTwo=False
+/processorParam:MakeSquare=False
+/processorParam:TextureFormat=Color
+/build:GameObjects/GreenSlime/sheet.png
+
 #begin GameObjects/Knight/death.png
 /importer:TextureImporter
 /processor:TextureProcessor
@@ -99,6 +111,9 @@
 
 #begin Levels/level1.tmx
 /copy:Levels/level1.tmx
+
+#begin Levels/level2.tmx
+/copy:Levels/level2.tmx
 
 #begin Levels/world_tileset.png
 /importer:TextureImporter

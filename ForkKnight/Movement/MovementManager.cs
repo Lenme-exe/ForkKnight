@@ -1,6 +1,5 @@
 ﻿using System;
 using System.Diagnostics;
-using ForkKnight.GameObjects;
 using Microsoft.Xna.Framework;
 
 namespace ForkKnight.Movement
@@ -19,7 +18,6 @@ namespace ForkKnight.Movement
 
         public void Move(IMovable movable, GameTime gameTime)
         {
-            Debug.WriteLine(movable.Velocity);
             _jumpManager.HandleJump(movable, gameTime);
 
             var direction = movable.InputReader.ReadInput();
