@@ -159,7 +159,7 @@ namespace ForkKnight.States
 
             foreach (var o in level1.ObjectGroups["PurpleSlime"].Objects)
             {
-                _purpleSlimes.Add(new PurpleSlime(movementManager, collisionHandler, purpleSlimeAnimationManager, new KeyboardReader())
+                _purpleSlimes.Add(new PurpleSlime(movementManager, collisionHandler, purpleSlimeAnimationManager, new PurpleSlimeMovement())
                 {
                     Position = new Vector2((int)o.X, (int)o.Y - (int)o.Height)
                 });

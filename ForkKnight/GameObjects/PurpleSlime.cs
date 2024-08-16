@@ -23,12 +23,27 @@ namespace ForkKnight.GameObjects
             HitboxOffsetY = 8;
         }
 
+        public override void Update(GameTime gameTime)
+        {
+            bool isPlayerLeft = CheckPlayerIsLeft();
+
+            if (InputReader is PurpleSlimeMovement inputReader)
+                inputReader.IsPlayerLeft(isPlayerLeft);
+
+            base.Update(gameTime);
+        }
+
         public override void UpdateHitbox()
         {
             var hitboxWidth = 24 - 4 - 5;
             var hitboxHeight = 24 - 9;
 
             Hitbox = new Rectangle((int)Position.X + 4, (int)Position.Y + 9, hitboxWidth, hitboxHeight);
+        }
+
+        private bool CheckPlayerIsLeft()
+        {
+            return true;
         }
     }
 }

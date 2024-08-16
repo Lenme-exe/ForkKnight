@@ -35,11 +35,8 @@ namespace ForkKnight.GameObjects
             bool collidedLeft = CheckCollisionWithLeftBoundary();
             bool collidedRight = CheckCollisionWithRightBoundary();
 
-            var inputReader = InputReader as GreenSlimeMovement;
-            if (inputReader != null)
-            {
+            if (InputReader is GreenSlimeMovement inputReader)
                 inputReader.SetCollision(collidedLeft, collidedRight);
-            }
 
             base.Update(gameTime);
         }
