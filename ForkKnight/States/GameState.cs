@@ -44,6 +44,12 @@ namespace ForkKnight.States
 
         #endregion
 
+        #region Coins
+
+        private List<GameObject> _coins;
+
+        #endregion
+
 
         public GameState(Game1 game, GraphicsDevice graphicsDevice, ContentManager contentManager) : base(game, graphicsDevice, contentManager)
         {
@@ -127,10 +133,10 @@ namespace ForkKnight.States
 
             #region Knight
 
-            var spawnPos = Vector2.One;
+            var spawnPosKnight = Vector2.One;
 
             foreach (var o in level1.ObjectGroups["Spawn"].Objects)
-                spawnPos = new Vector2((int)o.X, (int)o.Y - (int)o.Height);
+                spawnPosKnight = new Vector2((int)o.X, (int)o.Y - (int)o.Height);
 
             _knight = new Knight(
                 movementManager,
@@ -140,8 +146,22 @@ namespace ForkKnight.States
                 enemyCollisionHandler,
                 _greenSlimes)
             {
-                Position = spawnPos
+                Position = spawnPosKnight
             };
+
+            #endregion
+
+            #region coins
+
+            _coins = new List<GameObject>();
+
+            foreach (var o in level1.ObjectGroups["Coins"].Objects)
+            {
+                //_greenSlimes.Add(new Coin())
+                //{
+                //    Position = new Vector2((int)o.X, (int)o.Y - (int)o.Height)
+                //});
+            }
 
             #endregion
         }
