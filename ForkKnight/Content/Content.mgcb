@@ -112,6 +112,9 @@
 #begin Levels/level1.tmx
 /copy:Levels/level1.tmx
 
+#begin Levels/level2.tmx
+/copy:Levels/level2.tmx
+
 #begin Levels/world_tileset.png
 /importer:TextureImporter
 /processor:TextureProcessor

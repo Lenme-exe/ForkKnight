@@ -155,12 +155,12 @@ namespace ForkKnight.States
 
             _coins = new List<GameObject>();
 
-            foreach (var o in level1.ObjectGroups["GreenSlime"].Objects)
+            foreach (var o in level1.ObjectGroups["Coins"].Objects)
             {
-                _greenSlimes.Add(new Coin())
-                {
-                    Position = new Vector2((int)o.X, (int)o.Y - (int)o.Height)
-                });
+                //_greenSlimes.Add(new Coin())
+                //{
+                //    Position = new Vector2((int)o.X, (int)o.Y - (int)o.Height)
+                //});
             }
 
             #endregion
