@@ -112,7 +112,25 @@ namespace ForkKnight.States
 
             var movementManager = new MovementManager(new JumpManager());
             var collisionHandler = new CollisionHandler(new SolidObjectCollisionResponder(), collisionRects);
-            var enemyCollisionHandler = new EnemyCollisionHandler(new EnemyCollisionResponder());
+            var playerCollisionHandler = new PlayerPlayerEnemyCollisionHandler(new PlayerEnemyCollisionResponder());
+
+            #endregion
+
+            #region Knight
+
+            var spawnPosKnight = Vector2.One;
+
+            foreach (var o in level2.ObjectGroups["Spawn"].Objects)
+                spawnPosKnight = new Vector2((int)o.X, (int)o.Y - (int)o.Height);
+
+            _knight = new Knight(
+                movementManager,
+                collisionHandler,
+                knightAnimationManager,
+                new KeyboardReader())
+            {
+                Position = spawnPosKnight
+            };
 
             #endregion
 
@@ -130,31 +148,11 @@ namespace ForkKnight.States
             foreach (var o in level2.ObjectGroups["GreenSlime"].Objects)
             {
                 _greenSlimes.Add(new GreenSlime(movementManager, collisionHandler, slimeAnimationManager,
-                    new GreenSlimeMovement(), limitBoxes)
+                    new GreenSlimeMovement(), playerCollisionHandler, _knight, limitBoxes)
                 {
                     Position = new Vector2((int)o.X, (int)o.Y - (int)o.Height)
                 });
             }
-
-            #endregion
-
-            #region Knight
-
-            var spawnPosKnight = Vector2.One;
-
-            foreach (var o in level2.ObjectGroups["Spawn"].Objects)
-                spawnPosKnight = new Vector2((int)o.X, (int)o.Y - (int)o.Height);
-
-            _knight = new Knight(
-                movementManager,
-                collisionHandler,
-                knightAnimationManager,
-                new KeyboardReader(),
-                enemyCollisionHandler,
-                _greenSlimes)
-            {
-                Position = spawnPosKnight
-            };
 
             #endregion
 
