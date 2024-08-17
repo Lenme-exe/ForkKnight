@@ -129,44 +129,7 @@ namespace ForkKnight.States
 
             var movementManager = new MovementManager(new JumpManager());
             var collisionHandler = new CollisionHandler(new SolidObjectCollisionResponder(), collisionRects);
-            var enemyCollisionHandler = new EnemyCollisionHandler(new EnemyCollisionResponder());
-
-            #endregion
-
-            #region Enemies
-
-            var enemies = new List<GameObject>(); 
-
-            _greenSlimes = new List<GameObject>();
-
-            var limitBoxes = new List<Rectangle>();
-
-            foreach (var rect in level1.ObjectGroups["EnemyLimit"].Objects)
-            {
-                limitBoxes.Add(new Rectangle((int) rect.X, (int) rect.Y, (int) rect.Width, (int) rect.Height));
-            }
-
-            foreach (var o in level1.ObjectGroups["GreenSlime"].Objects)
-            {
-                _greenSlimes.Add(new GreenSlime(movementManager, collisionHandler, greenSlimeAnimationManager,
-                    new GreenSlimeMovement(), limitBoxes)
-                {
-                    Position = new Vector2((int)o.X, (int)o.Y - (int)o.Height)
-                });
-            }
-
-            _purpleSlimes = new List<GameObject>();
-
-            foreach (var o in level1.ObjectGroups["PurpleSlime"].Objects)
-            {
-                _purpleSlimes.Add(new PurpleSlime(movementManager, collisionHandler, purpleSlimeAnimationManager, new PurpleSlimeMovement())
-                {
-                    Position = new Vector2((int)o.X, (int)o.Y - (int)o.Height)
-                });
-            }
-
-            enemies.AddRange(_greenSlimes);
-            enemies.AddRange(_purpleSlimes);
+            var playerCollisionHandler = new PlayerPlayerEnemyCollisionHandler(new PlayerEnemyCollisionResponder());
 
             #endregion
 
@@ -181,12 +144,42 @@ namespace ForkKnight.States
                 movementManager,
                 collisionHandler,
                 knightAnimationManager,
-                new KeyboardReader(),
-                enemyCollisionHandler,
-                enemies)
+                new KeyboardReader())
             {
                 Position = spawnPosKnight
             };
+
+            #endregion
+
+            #region Enemies
+
+            _greenSlimes = new List<GameObject>();
+
+            var limitBoxes = new List<Rectangle>();
+
+            foreach (var rect in level1.ObjectGroups["EnemyLimit"].Objects)
+            {
+                limitBoxes.Add(new Rectangle((int)rect.X, (int)rect.Y, (int)rect.Width, (int)rect.Height));
+            }
+
+            foreach (var o in level1.ObjectGroups["GreenSlime"].Objects)
+            {
+                _greenSlimes.Add(new GreenSlime(movementManager, collisionHandler, greenSlimeAnimationManager,
+                    new GreenSlimeMovement(), playerCollisionHandler, _knight, limitBoxes)
+                {
+                    Position = new Vector2((int)o.X, (int)o.Y - (int)o.Height)
+                });
+            }
+
+            _purpleSlimes = new List<GameObject>();
+
+            foreach (var o in level1.ObjectGroups["PurpleSlime"].Objects)
+            {
+                _purpleSlimes.Add(new PurpleSlime(movementManager, collisionHandler, purpleSlimeAnimationManager, new PurpleSlimeMovement(), playerCollisionHandler, _knight)
+                {
+                    Position = new Vector2((int)o.X, (int)o.Y - (int)o.Height)
+                });
+            }
 
             #endregion
 

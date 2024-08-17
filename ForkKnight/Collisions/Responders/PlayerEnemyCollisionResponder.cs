@@ -10,7 +10,7 @@ using Microsoft.Xna.Framework;
 
 namespace ForkKnight.Collisions.Responders
 {
-    internal class EnemyCollisionResponder : ICollisionResponder
+    internal class PlayerEnemyCollisionResponder : ICollisionResponder
     {
         private bool _jumpedOnEnemyHead = false;
         public void RespondToCollision(GameObject gameObject, Rectangle collisionRectangle)

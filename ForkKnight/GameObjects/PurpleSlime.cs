@@ -11,13 +11,15 @@ using Microsoft.Xna.Framework;
 
 namespace ForkKnight.GameObjects
 {
-    internal class PurpleSlime : GameObject
+    internal class PurpleSlime : Enemy
     {
         public PurpleSlime(
             IMovementManager movementManager, 
             ICollisionHandler collisionHandler, 
             IAnimationManager animationManager, 
-            IInputReader inputReader) : base(movementManager, collisionHandler, animationManager, inputReader)
+            IInputReader inputReader,
+            IPlayerEnemyCollisionHandler playerCollisionHandler,
+            GameObject player) : base(movementManager, collisionHandler, animationManager, inputReader, playerCollisionHandler, player)
         {
             HitboxOffsetX = 4;
             HitboxOffsetY = 8;
@@ -43,7 +45,11 @@ namespace ForkKnight.GameObjects
 
         private bool CheckPlayerIsLeft()
         {
-            return true;
+            if (Player.Hitbox.Left + Player.Hitbox.Width/ 2 < Hitbox.Left + Hitbox.Width / 2)
+            {
+                return true;
+            }
+            return false;
         }
     }
 }

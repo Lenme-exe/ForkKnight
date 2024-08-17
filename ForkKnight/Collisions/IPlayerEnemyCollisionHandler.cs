@@ -7,8 +7,8 @@ using System.Threading.Tasks;
 
 namespace ForkKnight.Collisions
 {
-    internal interface IEnemyCollisionHandler
+    internal interface IPlayerEnemyCollisionHandler
     {
-        void CheckCollision(GameObject player, List<GameObject> enemies);
+        void CheckCollision(Enemy enemy, GameObject player);
     }
 }

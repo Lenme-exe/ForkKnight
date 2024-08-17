@@ -13,7 +13,7 @@ using Microsoft.Xna.Framework.Graphics;
 
 namespace ForkKnight.GameObjects
 {
-    internal class GreenSlime : GameObject
+    internal class GreenSlime : Enemy
     {
         private List<Rectangle> _limitRectangles;
         public GreenSlime(
@@ -21,7 +21,9 @@ namespace ForkKnight.GameObjects
             ICollisionHandler collisionHandler,
             IAnimationManager animationManager,
             IInputReader inputReader,
-            List<Rectangle> limitBoxes) : base(movementManager, collisionHandler, animationManager, inputReader)
+            IPlayerEnemyCollisionHandler playerCollisionHandler,
+            GameObject player,
+            List<Rectangle> limitBoxes) : base(movementManager, collisionHandler, animationManager, inputReader, playerCollisionHandler, player)
         {
             _limitRectangles = limitBoxes;
             HitboxOffsetX = 4;
