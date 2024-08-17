@@ -42,7 +42,7 @@ namespace ForkKnight.Collisions.Responders
                 else if (gameObject.Velocity.X < 0 && gameObject.Hitbox.Left < collisionRectangle.Right &&
                          gameObject.Hitbox.Right > collisionRectangle.Right)
                 {
-                    gameObject.Position = new Vector2(collisionRectangle.Right, gameObject.Position.Y);
+                    gameObject.Position = new Vector2(collisionRectangle.Right - gameObject.HitboxOffsetX, gameObject.Position.Y);
                     gameObject.Velocity = new Vector2(0, gameObject.Velocity.Y);
                 }
             }

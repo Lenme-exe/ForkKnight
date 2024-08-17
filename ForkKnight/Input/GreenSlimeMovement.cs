@@ -9,16 +9,35 @@ namespace ForkKnight.Input
 {
     internal class GreenSlimeMovement : IInputReader
     {
+        private Vector2 _direction = new Vector2(1, 0); // Start moving right initially
+        private bool _collidedLeft;
+        private bool _collidedRight;
+
         public Vector2 ReadInput()
         {
-            var direction = Vector2.Zero;
+            // If collided with left boundary, move right
+            if (_collidedLeft)
+            {
+                _direction = new Vector2(1, 0);
+            }
+            // If collided with right boundary, move left
+            else if (_collidedRight)
+            {
+                _direction = new Vector2(-1, 0);
+            }
 
-            return direction;
+            return _direction;
         }
 
         public bool IsJumping()
         {
-            return false;
+            return false; // No jumping for this enemy
+        }
+
+        public void SetCollision(bool collidedLeft, bool collidedRight)
+        {
+            _collidedLeft = collidedLeft;
+            _collidedRight = collidedRight;
         }
     }
 }

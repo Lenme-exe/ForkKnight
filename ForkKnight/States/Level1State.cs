@@ -120,10 +120,17 @@ namespace ForkKnight.States
 
             _greenSlimes = new List<GameObject>();
 
+            var limitBoxes = new List<Rectangle>();
+
+            foreach (var rect in level1.ObjectGroups["EnemyLimit"].Objects)
+            {
+                limitBoxes.Add(new Rectangle((int) rect.X, (int) rect.Y, (int) rect.Width, (int) rect.Height));
+            }
+
             foreach (var o in level1.ObjectGroups["GreenSlime"].Objects)
             {
                 _greenSlimes.Add(new GreenSlime(movementManager, collisionHandler, slimeAnimationManager,
-                    new GreenSlimeMovement())
+                    new GreenSlimeMovement(), limitBoxes)
                 {
                     Position = new Vector2((int)o.X, (int)o.Y - (int)o.Height)
                 });
@@ -168,10 +175,6 @@ namespace ForkKnight.States
 
         public override void Draw(GameTime gameTime, SpriteBatch spriteBatch)
         {
-            Texture2D texture;
-
-            texture = new Texture2D(_graphicsDevice, 1, 1);
-            texture.SetData(new Color[] {Color.Red});
             spriteBatch.Begin();
 
             spriteBatch.Draw(_background, new Rectangle(0, 0, _graphicsDevice.Viewport.Width, _graphicsDevice.Viewport.Height), Color.White);
