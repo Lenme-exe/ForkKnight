@@ -42,6 +42,9 @@ namespace ForkKnight.States
 
         private List<GameObject> _greenSlimes;
         private List<GameObject> _purpleSlimes;
+        private List<GameObject> _slimeBullets;
+        private Texture2D _slimeBulletTexture;
+        private ICollisionHandler _slimeBulletCollisionHandler;
 
         #endregion
 
@@ -173,6 +176,11 @@ namespace ForkKnight.States
 
             _purpleSlimes = new List<GameObject>();
 
+            _slimeBullets = new List<GameObject>();
+            _slimeBulletTexture = _contentManager.Load<Texture2D>(@"GameObjects\PurpleSlime\slimeBullet");
+            _slimeBulletCollisionHandler =
+                new CollisionHandler(new SlimeBulletSolidObjectCollisionResponder(), collisionRects);
+
             foreach (var o in level1.ObjectGroups["PurpleSlime"].Objects)
             {
                 _purpleSlimes.Add(new PurpleSlime(movementManager, collisionHandler, purpleSlimeAnimationManager, new PurpleSlimeMovement(), playerCollisionHandler, _knight)
@@ -180,6 +188,8 @@ namespace ForkKnight.States
                     Position = new Vector2((int)o.X, (int)o.Y - (int)o.Height)
                 });
             }
+
+
 
             #endregion
 
@@ -213,7 +223,10 @@ namespace ForkKnight.States
 
             foreach (var purpleSlime in _purpleSlimes)
                 purpleSlime.Draw(spriteBatch, gameTime);
-            
+
+            foreach (var slimeBullet in _slimeBullets)
+                slimeBullet.Draw(spriteBatch, gameTime);
+
             spriteBatch.End();
         }
 
@@ -227,9 +240,20 @@ namespace ForkKnight.States
             _knight.Update(gameTime);
             foreach (var greenSlime in _greenSlimes)
                 greenSlime.Update(gameTime);
-            
-            foreach(var purpleSlime in _purpleSlimes)
+
+            foreach (var purpleSlime in _purpleSlimes)
+            {
                 purpleSlime.Update(gameTime);
+                var slime = purpleSlime as PurpleSlime;
+                var slimeBullet = slime.Shoot(_slimeBulletTexture, _slimeBulletCollisionHandler, gameTime);
+                if(slimeBullet != null)
+                    _slimeBullets.Add(slimeBullet);
+            }
+
+            foreach (var slimeBullet in _slimeBullets)
+            {
+                slimeBullet.Update(gameTime);
+            }
 
             if (_knight.Position.Y > _graphicsDevice.Viewport.Height + 100 || _knight.IsDestroyed)
             {
