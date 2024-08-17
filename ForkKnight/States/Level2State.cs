@@ -46,7 +46,7 @@ namespace ForkKnight.States
 
         #region Coins
 
-        private List<GameObject> _coins;
+        private List<Coin> _coins;
 
         #endregion
 
@@ -113,6 +113,8 @@ namespace ForkKnight.States
             var movementManager = new MovementManager(new JumpManager());
             var collisionHandler = new CollisionHandler(new SolidObjectCollisionResponder(), collisionRects);
             var enemyCollisionHandler = new EnemyCollisionHandler(new EnemyCollisionResponder());
+            var coinCollisionHandler = new CoinCollisionHandler(new CoinCollisionResponder());
+
 
             #endregion
 
@@ -138,6 +140,19 @@ namespace ForkKnight.States
 
             #endregion
 
+            #region coins
+
+            _coins = new List<Coin>();
+
+            foreach (var o in level2.ObjectGroups["Coins"].Objects)
+            {
+                var coinPosition = new Vector2((int)o.X, (int)o.Y - (int)o.Height);
+                var coinTexture = contentManager.Load<Texture2D>(@"GameObjects/Coin/coin");  // Make sure to load the correct texture for the coin
+                _coins.Add(new Coin(coinTexture, coinPosition));
+            }
+
+            #endregion
+
             #region Knight
 
             var spawnPosKnight = Vector2.One;
@@ -151,24 +166,12 @@ namespace ForkKnight.States
                 knightAnimationManager,
                 new KeyboardReader(),
                 enemyCollisionHandler,
+                coinCollisionHandler,
+                _coins,
                 _greenSlimes)
             {
                 Position = spawnPosKnight
             };
-
-            #endregion
-
-            #region coins
-
-            //_coins = new List<GameObject>();
-
-            //foreach (var o in level2.ObjectGroups["Coins"].Objects)
-            //{
-            //    _greenSlimes.Add(new Coin())
-            //    {
-            //        Position = new Vector2((int)o.X, (int)o.Y - (int)o.Height)
-            //    });
-            //}
 
             #endregion
         }
@@ -188,6 +191,10 @@ namespace ForkKnight.States
             {
                 greenSlime.Draw(spriteBatch, gameTime);
             }
+            foreach (var coin in _coins)
+            {
+                coin.Draw(spriteBatch, gameTime);
+            }
 
             spriteBatch.End();
         }
@@ -203,6 +210,10 @@ namespace ForkKnight.States
             foreach (var greenSlime in _greenSlimes)
             {
                 greenSlime.Update(gameTime);
+            }
+            foreach (var coin in _coins)
+            {
+                coin.Update(gameTime);  // If you implement logic inside the Update method later
             }
 
             if (_knight.Position.Y > _graphicsDevice.Viewport.Height + 100 || _knight.IsDestroyed)

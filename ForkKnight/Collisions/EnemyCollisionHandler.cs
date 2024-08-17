@@ -11,9 +11,9 @@ namespace ForkKnight.Collisions
 {
     internal class EnemyCollisionHandler : IEnemyCollisionHandler
     {
-        private readonly ICollisionResponder _collisionResponder;
+        private readonly IEnemyCollisionResponder _collisionResponder;
 
-        public EnemyCollisionHandler(ICollisionResponder collisionResponder)
+        public EnemyCollisionHandler(IEnemyCollisionResponder collisionResponder)
         {
             _collisionResponder = collisionResponder;
         }
@@ -27,6 +27,7 @@ namespace ForkKnight.Collisions
                     _collisionResponder.RespondToCollision(player, enemy.Hitbox);
 
                     _collisionResponder.RespondToCollision(enemy, player.Hitbox);
+
 
                     break;
                 }

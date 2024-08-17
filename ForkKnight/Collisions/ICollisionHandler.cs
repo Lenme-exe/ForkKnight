@@ -8,6 +8,6 @@ namespace ForkKnight.Collisions;
 
 internal interface ICollisionHandler
 {
-    ICollisionResponder CollisionResponder { get; }
+    IEnemyCollisionResponder CollisionResponder { get; }
     void CheckCollision(GameObject gameObject);
 }

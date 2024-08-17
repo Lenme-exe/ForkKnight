@@ -22,6 +22,11 @@ namespace ForkKnight.States
 
             var image = _contentManager.Load<Texture2D>(@"UI\main-menu-sprite");
 
+            var ContinueButton = new Button(buttonTexture, _font)
+            {
+                Position = new Vector2(_graphicsDevice.Viewport.Width / 2 - buttonTexture.Width / 2, 250),
+                Text = "Continue",
+            };
             var menuButton = new Button(buttonTexture, _font)
             {
                 Position = new Vector2(_graphicsDevice.Viewport.Width / 2 - buttonTexture.Width / 2, 320),
@@ -33,10 +38,12 @@ namespace ForkKnight.States
                 DestinationRectangle = new Rectangle(_graphicsDevice.Viewport.Width / 2 - 64, 120, 128, 128),
             };
 
+            ContinueButton.Click += ContinueButtonOnClick;
             menuButton.Click += MainMenuButtonOnClick;
 
             _components = new List<Component>()
             {
+                ContinueButton,
                 menuButton,
                 mainImage
             };
@@ -67,6 +74,17 @@ namespace ForkKnight.States
                 component.Update(gameTime);
         }
 
+        private void ContinueButtonOnClick(object sender, EventArgs e)
+        {
+            if (_game._previousState is Level1State)
+            {
+                _game.ChangeState(new Level2State(_game, _graphicsDevice, _contentManager));
+            }
+            else if (_game._previousState is Level2State)
+            {
+                _game.ChangeState(new MenuState(_game, _graphicsDevice, _contentManager));
+            }
+        }
         private void MainMenuButtonOnClick(object sender, EventArgs e)
         {
             _game.ChangeState(new MenuState(_game, _graphicsDevice, _contentManager));
