@@ -13,7 +13,7 @@ using Microsoft.Xna.Framework.Graphics;
 
 namespace ForkKnight.GameObjects
 {
-    internal class GreenSlime : GameObject
+    internal class GreenSlime : Enemy
     {
         private List<Rectangle> _limitRectangles;
         public GreenSlime(
@@ -21,7 +21,9 @@ namespace ForkKnight.GameObjects
             ICollisionHandler collisionHandler,
             IAnimationManager animationManager,
             IInputReader inputReader,
-            List<Rectangle> limitBoxes) : base(movementManager, collisionHandler, animationManager, inputReader)
+            IPlayerEnemyCollisionHandler playerCollisionHandler,
+            GameObject player,
+            List<Rectangle> limitBoxes) : base(movementManager, collisionHandler, animationManager, inputReader, playerCollisionHandler, player)
         {
             _limitRectangles = limitBoxes;
             HitboxOffsetX = 4;
@@ -35,12 +37,8 @@ namespace ForkKnight.GameObjects
             bool collidedLeft = CheckCollisionWithLeftBoundary();
             bool collidedRight = CheckCollisionWithRightBoundary();
 
-            // Update the enemy's input based on collisions
-            var inputReader = InputReader as GreenSlimeMovement;
-            if (inputReader != null)
-            {
+            if (InputReader is GreenSlimeMovement inputReader)
                 inputReader.SetCollision(collidedLeft, collidedRight);
-            }
 
             base.Update(gameTime);
         }
@@ -55,7 +53,6 @@ namespace ForkKnight.GameObjects
 
         private bool CheckCollisionWithLeftBoundary()
         {
-            // Example logic, adjust according to your game's needs
             foreach (var rect in _limitRectangles)
             {
                 if (rect.Intersects(Hitbox))
@@ -74,7 +71,6 @@ namespace ForkKnight.GameObjects
 
         private bool CheckCollisionWithRightBoundary()
         {
-            // Example logic, adjust according to your game's needs
             foreach (var rect in _limitRectangles)
             {
                 if (rect.Intersects(Hitbox))
@@ -82,7 +78,7 @@ namespace ForkKnight.GameObjects
                     if (Velocity.X > 0 && Hitbox.Right > rect.Left &&
                         Hitbox.Left < rect.Left)
                     {
-                        Position = new Vector2(rect.Left - Hitbox.Width - HitboxOffsetX, Position.Y); //kanker
+                        Position = new Vector2(rect.Left - Hitbox.Width - HitboxOffsetX, Position.Y);
                         Velocity = new Vector2(0, Velocity.Y);
                         return true;
                     }

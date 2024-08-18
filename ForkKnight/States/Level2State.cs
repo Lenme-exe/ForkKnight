@@ -128,9 +128,9 @@ namespace ForkKnight.States
 
             var movementManager = new MovementManager(new JumpManager());
             var collisionHandler = new CollisionHandler(new SolidObjectCollisionResponder(), collisionRects);
-            var enemyCollisionHandler = new EnemyCollisionHandler(new EnemyCollisionResponder());
             var coinCollisionHandler = new CoinCollisionHandler(new CoinCollisionResponder());
-
+            
+            var playerCollisionHandler = new PlayerPlayerEnemyCollisionHandler(new PlayerEnemyCollisionResponder());
 
             #endregion
 
@@ -148,7 +148,7 @@ namespace ForkKnight.States
             foreach (var o in level2.ObjectGroups["GreenSlime"].Objects)
             {
                 _greenSlimes.Add(new GreenSlime(movementManager, collisionHandler, slimeAnimationManager,
-                    new GreenSlimeMovement(), limitBoxes)
+                    new GreenSlimeMovement(), playerCollisionHandler, _knight, limitBoxes)
                 {
                     Position = new Vector2((int)o.X, (int)o.Y - (int)o.Height)
                 });
@@ -184,10 +184,8 @@ namespace ForkKnight.States
                 collisionHandler,
                 knightAnimationManager,
                 new KeyboardReader(),
-                enemyCollisionHandler,
                 coinCollisionHandler,
-                _coins,
-                _greenSlimes)
+                _coins)
             {
                 Position = spawnPosKnight
             };

@@ -11,25 +11,20 @@ namespace ForkKnight.GameObjects
 {
     internal class Knight : GameObject
     {
-        private readonly IEnemyCollisionHandler _enemyCollisionHandler;
         private readonly IPickupCollisionHandler _coinCollisionHandler;
-        private readonly List<GameObject> _enemies;
         private readonly List<Pickup> _coins;
+
         public Knight(
             IMovementManager movementManager,
             ICollisionHandler collisionHandler,
             IAnimationManager animationManager,
             IInputReader inputReader,
-            IEnemyCollisionHandler enemyCollisionHandler,
             IPickupCollisionHandler coinCollisionHandler,
-            List<Pickup> coins,
-            List<GameObject> enemies) : base(movementManager, collisionHandler, animationManager, inputReader)
+            List<Pickup> coins) : base(movementManager, collisionHandler, animationManager, inputReader)
         {
             HitboxOffsetX = 9;
             HitboxOffsetY = 9;
-            _enemyCollisionHandler = enemyCollisionHandler;
             _coinCollisionHandler = coinCollisionHandler;
-            _enemies = enemies;
             _coins = coins;
             Acceleration = 5f;
             MaxSpeed = 3f;
@@ -39,7 +34,6 @@ namespace ForkKnight.GameObjects
         public override void Update(GameTime gameTime)
         {
             base.Update(gameTime);
-            _enemyCollisionHandler.CheckCollision(this, _enemies);
             _coinCollisionHandler.CheckCollision(this, _coins);
         }
 
