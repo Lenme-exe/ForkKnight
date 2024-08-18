@@ -112,7 +112,7 @@ namespace ForkKnight.States
 
             var movementManager = new MovementManager(new JumpManager());
             var collisionHandler = new CollisionHandler(new SolidObjectCollisionResponder(), collisionRects);
-            var playerCollisionHandler = new PlayerPlayerEnemyCollisionHandler(new PlayerEnemyCollisionResponder());
+            var playerCollisionHandler = new PlayerEnemyCollisionHandler(new PlayerEnemyCollisionResponder());
 
             #endregion
 
