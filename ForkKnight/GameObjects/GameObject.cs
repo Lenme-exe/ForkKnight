@@ -12,7 +12,7 @@ using Microsoft.Xna.Framework.Graphics;
 
 namespace ForkKnight.GameObjects
 {
-    internal abstract class GameObject : IGameObject, IMovable
+    internal abstract class GameObject : IGameObject, IMovable, ICollidable
     {
         public int HitboxOffsetX { get; set; } = 0;
         public int HitboxOffsetY { get; set; } = 0;
@@ -49,19 +49,17 @@ namespace ForkKnight.GameObjects
 
         public virtual void Update(GameTime gameTime)
         {
-            if (!IsDestroyed)
-            {
-                _movementManager.Move(this, gameTime);
-                _collisionHandler.CheckCollision(this);
-                _animationManager.Update(this, gameTime);
-                UpdateHitbox();
-            }
+            if (IsDestroyed) return;
+            _movementManager.Move(this, gameTime);
+            _collisionHandler.CheckCollision(this);
+            _animationManager.Update(this, gameTime);
+            UpdateHitbox();
         }
 
         public virtual void Draw(SpriteBatch spriteBatch, GameTime gameTime)
         {
-            if (!IsDestroyed)
-                _animationManager.Draw(spriteBatch, this, gameTime);
+            if (IsDestroyed) return;
+            _animationManager.Draw(spriteBatch, this, gameTime);
         }
 
         public virtual void UpdateHitbox()

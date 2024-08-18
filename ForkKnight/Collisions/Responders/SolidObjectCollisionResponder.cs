@@ -20,7 +20,7 @@ namespace ForkKnight.Collisions.Responders
                 if (gameObject.Velocity.Y > 0 && gameObject.Hitbox.Bottom > collisionRectangle.Top &&
                     gameObject.Hitbox.Top < collisionRectangle.Top)
                 {
-                    gameObject.Position = new Vector2(gameObject.Position.X, collisionRectangle.Top - gameObject.Hitbox.Height - gameObject.HitboxOffsetY); //kanker
+                    gameObject.Position = new Vector2(gameObject.Position.X, collisionRectangle.Top - gameObject.Hitbox.Height - gameObject.HitboxOffsetY);
                     gameObject.Velocity = new Vector2(gameObject.Velocity.X, 0);
                     gameObject.IsFalling = false;
                 }
@@ -36,7 +36,7 @@ namespace ForkKnight.Collisions.Responders
                 if (gameObject.Velocity.X > 0 && gameObject.Hitbox.Right > collisionRectangle.Left &&
                     gameObject.Hitbox.Left < collisionRectangle.Left)
                 {
-                    gameObject.Position = new Vector2(collisionRectangle.Left - gameObject.Hitbox.Width - gameObject.HitboxOffsetX, gameObject.Position.Y); //kanker
+                    gameObject.Position = new Vector2(collisionRectangle.Left - gameObject.Hitbox.Width - gameObject.HitboxOffsetX, gameObject.Position.Y);
                     gameObject.Velocity = new Vector2(0, gameObject.Velocity.Y);
                 }
                 else if (gameObject.Velocity.X < 0 && gameObject.Hitbox.Left < collisionRectangle.Right &&
@@ -46,6 +46,11 @@ namespace ForkKnight.Collisions.Responders
                     gameObject.Velocity = new Vector2(0, gameObject.Velocity.Y);
                 }
             }
+        }
+
+        public void RespondToCollision(Pickup pickup, Rectangle collisionRectangle)
+        {
+            throw new NotImplementedException();
         }
     }
 }

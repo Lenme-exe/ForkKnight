@@ -50,7 +50,7 @@ namespace ForkKnight.States
 
         #region Coins
 
-        private List<GameObject> _coins;
+        private List<Pickup> _coins;
 
         #endregion
 
@@ -106,6 +106,21 @@ namespace ForkKnight.States
                 },
             };
 
+
+            var coinSheet = contentManager.Load<Texture2D>(@"GameObjects/Coin/coin");
+
+            var coinAnimations = new Dictionary<CurrentAnimation, Animation>()
+            {
+                {
+                    CurrentAnimation.Idle,
+                    new Animation(coinSheet, 16, 16)
+                },
+                {
+                    CurrentAnimation.Run,
+                    new Animation(coinSheet, 16, 16)
+                },
+            };
+
             var purpleSlimeSheet = _contentManager.Load<Texture2D>(@"GameObjects\PurpleSlime\sheet");
 
             var purpleSlimeAnimations = new Dictionary<CurrentAnimation, Animation>
@@ -126,13 +141,16 @@ namespace ForkKnight.States
 
             IAnimationManager knightAnimationManager = new AnimationManager(knightAnimations);
 
+            IAnimationManager coinAnimationManager = new AnimationManager(coinAnimations);
+
             #endregion
 
             #region MovementManager and CollisionHandler
 
             var movementManager = new MovementManager(new JumpManager());
             var collisionHandler = new CollisionHandler(new SolidObjectCollisionResponder(), collisionRects);
-            var playerCollisionHandler = new PlayerEnemyCollisionHandler(new PlayerEnemyCollisionResponder());
+            var playerPickupCollisionHandler = new CoinCollisionHandler(new CoinCollisionResponder());
+            var playerEnemyCollisionHandler = new PlayerEnemyCollisionHandler(new PlayerEnemyCollisionResponder());
 
             #endregion
 
@@ -168,7 +186,7 @@ namespace ForkKnight.States
             foreach (var o in level1.ObjectGroups["GreenSlime"].Objects)
             {
                 _greenSlimes.Add(new GreenSlime(movementManager, collisionHandler, greenSlimeAnimationManager,
-                    new GreenSlimeMovement(), playerCollisionHandler, _knight, limitBoxes)
+                    new GreenSlimeMovement(), playerEnemyCollisionHandler, _knight, limitBoxes)
                 {
                     Position = new Vector2((int)o.X, (int)o.Y - (int)o.Height)
                 });
@@ -183,27 +201,27 @@ namespace ForkKnight.States
 
             foreach (var o in level1.ObjectGroups["PurpleSlime"].Objects)
             {
-                _purpleSlimes.Add(new PurpleSlime(movementManager, collisionHandler, purpleSlimeAnimationManager, new PurpleSlimeMovement(), playerCollisionHandler, _knight)
+                _purpleSlimes.Add(new PurpleSlime(movementManager, collisionHandler, purpleSlimeAnimationManager, new PurpleSlimeMovement(), playerEnemyCollisionHandler, _knight)
                 {
                     Position = new Vector2((int)o.X, (int)o.Y - (int)o.Height)
                 });
             }
 
-
-
             #endregion
 
             #region coins
 
-            //_coins = new List<GameObject>();
+            _coins = new List<Pickup>();
 
-            //foreach (var o in level1.ObjectGroups["Coins"].Objects)
-            //{
-            //    _greenSlimes.Add(new Coin())
-            //    {
-            //        Position = new Vector2((int)o.X, (int)o.Y - (int)o.Height)
-            //    });
-            //}
+            foreach (var o in level1.ObjectGroups["Coins"].Objects)
+            {
+                var coinPosition = new Vector2((int)o.X, (int)o.Y - (int)o.Height);
+
+                _coins.Add(new Coin(coinAnimationManager, _knight, playerPickupCollisionHandler)
+                {
+                    Position = coinPosition,
+                });
+            }
 
             #endregion
         }
@@ -220,6 +238,10 @@ namespace ForkKnight.States
 
             foreach (var greenSlime in _greenSlimes)
                 greenSlime.Draw(spriteBatch, gameTime);
+            foreach (var coin in _coins)
+            {
+                coin.Draw(spriteBatch, gameTime);
+            }
 
             foreach (var purpleSlime in _purpleSlimes)
                 purpleSlime.Draw(spriteBatch, gameTime);
@@ -251,14 +273,18 @@ namespace ForkKnight.States
             }
 
             foreach (var slimeBullet in _slimeBullets)
-            {
                 slimeBullet.Update(gameTime);
-            }
+
+            foreach (var coin in _coins)
+                coin.Update(gameTime);
+
 
             if (_knight.Position.Y > _graphicsDevice.Viewport.Height + 100 || _knight.IsDestroyed)
-            {
                 _game.ChangeState(new DeathState(_game, _graphicsDevice, _contentManager));
-            }
+
+            var allDestroyed = _coins.All(coin => coin.IsDestroyed);
+            if (allDestroyed)
+                _game.ChangeState(new Level2State(_game, _graphicsDevice, _contentManager));
         }
     }
 }

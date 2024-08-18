@@ -34,7 +34,7 @@ namespace ForkKnight.GameObjects
 
         public override void Update(GameTime gameTime)
         {
-            bool isPlayerLeft = CheckPlayerIsLeft();
+            var isPlayerLeft = CheckPlayerIsLeft();
 
             if (InputReader is PurpleSlimeMovement inputReader)
                 inputReader.IsPlayerLeft(isPlayerLeft);
@@ -52,11 +52,7 @@ namespace ForkKnight.GameObjects
 
         private bool CheckPlayerIsLeft()
         {
-            if (Player.Hitbox.Left + Player.Hitbox.Width/ 2 < Hitbox.Left + Hitbox.Width / 2)
-            {
-                return true;
-            }
-            return false;
+            return Player.Hitbox.Left + Player.Hitbox.Width/ 2 < Hitbox.Left + Hitbox.Width / 2;
         }
 
         private const float _delay = 2;
@@ -64,43 +60,38 @@ namespace ForkKnight.GameObjects
 
         public SlimeBullet Shoot(Texture2D texture, ICollisionHandler collisionHandler, GameTime gameTime)
         {
+            if (IsDestroyed)
+                return null;
+
             var timer = (float)gameTime.ElapsedGameTime.TotalSeconds;
 
             _remainingDelay -= timer;
 
-            if (_remainingDelay <= 0)
+            if (!(_remainingDelay <= 0)) return null;
+            _remainingDelay = _delay;
+
+            var slimeBulletAnimation = new Animation(texture, 16, 16);
+
+            var slimeBulletAnimationManager = new AnimationManager(new Dictionary<CurrentAnimation, Animation>()
             {
-                _remainingDelay = _delay;
-
-                var slimeBulletAnimation = new Animation(texture, 16, 16);
-
-                var slimeBulletAnimationManager = new AnimationManager(new Dictionary<CurrentAnimation, Animation>()
                 {
-                    {
-                        CurrentAnimation.Idle, slimeBulletAnimation
-                    },
-                    {
-                        CurrentAnimation.Run, slimeBulletAnimation
-                    }
-                });
-
-                var slimeBulletVelocity = Vector2.Zero;
-
-                if (CheckPlayerIsLeft())
-                    slimeBulletVelocity = new Vector2(-3, -5);
-                else
-                    slimeBulletVelocity = new Vector2(3, -5);
-
-                var slimeBullet = new SlimeBullet(_movementManager, collisionHandler, slimeBulletAnimationManager, new PurpleSlimeMovement(),
-                    _playerCollisionHandler, Player)
+                    CurrentAnimation.Idle, slimeBulletAnimation
+                },
                 {
-                    Position = Position,
-                    Velocity = slimeBulletVelocity
-                };
-                return slimeBullet;
-            }
-            
-            return null;
+                    CurrentAnimation.Run, slimeBulletAnimation
+                }
+            });
+
+            var slimeBulletVelocity = CheckPlayerIsLeft() ? new Vector2(-3, -5) : new Vector2(3, -5);
+
+            var slimeBullet = new SlimeBullet(_movementManager, collisionHandler, slimeBulletAnimationManager, new PurpleSlimeMovement(),
+                _playerCollisionHandler, Player)
+            {
+                Position = Position,
+                Velocity = slimeBulletVelocity
+            };
+            return slimeBullet;
+
         }
     }
 }

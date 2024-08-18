@@ -1,35 +1,20 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-using ForkKnight.Animations;
+﻿using ForkKnight.Animations;
+using ForkKnight.Collisions;
 using Microsoft.Xna.Framework;
-using Microsoft.Xna.Framework.Graphics;
 
 namespace ForkKnight.GameObjects
 {
-    internal class Coin : IGameObject
+    internal class Coin : Pickup
     {
-        public Rectangle Hitbox { get; set; }
-
-        private readonly Vector2 _position;
-        private Animation _animation;
-
-        public Coin(Texture2D texture, Vector2 position)
+        public Coin(IAnimationManager animationManager, GameObject player, IPlayerPickupCollisionHandler playerPickupCollisionHandler) : base(animationManager, player, playerPickupCollisionHandler)
         {
-            _position = position;
-            _animation = new Animation(texture, 16, 16);
+
         }
 
-        public void Update(GameTime gameTime)
+        public override void UpdateHitbox()
         {
-            throw new NotImplementedException();
-        }
-
-        public void Draw(SpriteBatch spriteBatch, GameTime gameTime)
-        {
-            _animation.Draw(spriteBatch, _position, gameTime);
+            Hitbox = new Rectangle((int)Position.X, (int)Position.Y, 16, 16);
         }
     }
 }
+

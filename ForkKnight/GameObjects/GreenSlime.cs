@@ -55,16 +55,12 @@ namespace ForkKnight.GameObjects
         {
             foreach (var rect in _limitRectangles)
             {
-                if (rect.Intersects(Hitbox))
-                {
-                    if (Velocity.X < 0 && Hitbox.Left < rect.Right &&
-                        Hitbox.Right > rect.Right)
-                    {
-                        Position = new Vector2(rect.Right, Position.Y);
-                        Velocity = new Vector2(0, Velocity.Y);
-                        return true;
-                    }
-                }
+                if (!rect.Intersects(Hitbox)) continue;
+                if (!(Velocity.X < 0) || Hitbox.Left >= rect.Right ||
+                    Hitbox.Right <= rect.Right) continue;
+                Position = new Vector2(rect.Right, Position.Y);
+                Velocity = new Vector2(0, Velocity.Y);
+                return true;
             }
             return false;
         }
@@ -73,16 +69,12 @@ namespace ForkKnight.GameObjects
         {
             foreach (var rect in _limitRectangles)
             {
-                if (rect.Intersects(Hitbox))
-                {
-                    if (Velocity.X > 0 && Hitbox.Right > rect.Left &&
-                        Hitbox.Left < rect.Left)
-                    {
-                        Position = new Vector2(rect.Left - Hitbox.Width - HitboxOffsetX, Position.Y);
-                        Velocity = new Vector2(0, Velocity.Y);
-                        return true;
-                    }
-                }
+                if (!rect.Intersects(Hitbox)) continue;
+                if (!(Velocity.X > 0) || Hitbox.Right <= rect.Left ||
+                    Hitbox.Left >= rect.Left) continue;
+                Position = new Vector2(rect.Left - Hitbox.Width - HitboxOffsetX, Position.Y);
+                Velocity = new Vector2(0, Velocity.Y);
+                return true;
             }
             return false;
         }

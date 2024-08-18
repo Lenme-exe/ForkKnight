@@ -12,5 +12,6 @@ namespace ForkKnight.Collisions.Responders
     internal interface ICollisionResponder
     {
         void RespondToCollision(GameObject gameObject, Rectangle collisionRectangle);
+        void RespondToCollision(Pickup pickup, Rectangle collisionRectangle);
     }
 }

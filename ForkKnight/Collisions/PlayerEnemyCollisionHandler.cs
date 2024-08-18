@@ -20,12 +20,10 @@ namespace ForkKnight.Collisions
 
         public void CheckCollision(Enemy enemy, GameObject player)
         {
-            if (player.Hitbox.Intersects(enemy.Hitbox))
-            {
-                _collisionResponder.RespondToCollision(player, enemy.Hitbox);
+            if (!player.Hitbox.Intersects(enemy.Hitbox)) return;
+            _collisionResponder.RespondToCollision(player, enemy.Hitbox);
 
-                _collisionResponder.RespondToCollision(enemy, player.Hitbox);
-            }
+            _collisionResponder.RespondToCollision(enemy, player.Hitbox);
         }
     }
 }

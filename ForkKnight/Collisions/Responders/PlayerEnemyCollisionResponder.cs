@@ -44,5 +44,10 @@ namespace ForkKnight.Collisions.Responders
                 gameObject.Destroy();
             }
         }
+
+        public void RespondToCollision(Pickup pickup, Rectangle collisionRectangle)
+        {
+            throw new NotImplementedException();
+        }
     }
 }
