@@ -64,6 +64,9 @@ namespace ForkKnight.GameObjects
 
         public SlimeBullet Shoot(Texture2D texture, ICollisionHandler collisionHandler, GameTime gameTime)
         {
+            if (IsDestroyed)
+                return null;
+
             var timer = (float)gameTime.ElapsedGameTime.TotalSeconds;
 
             _remainingDelay -= timer;
