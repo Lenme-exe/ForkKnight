@@ -31,7 +31,9 @@ namespace ForkKnight.GameObjects
 
         public override void Update(GameTime gameTime)
         {
-            _enemyCollisionHandler.CheckCollision(this, Player);
+            if (Player != null)
+                _enemyCollisionHandler.CheckCollision(this, Player);
+            
             base.Update(gameTime);
         }
     }

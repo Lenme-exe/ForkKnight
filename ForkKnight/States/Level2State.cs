@@ -41,6 +41,10 @@ namespace ForkKnight.States
         #region Enemies
 
         private List<GameObject> _greenSlimes;
+        private List<GameObject> _purpleSlimes;
+        private List<GameObject> _slimeBullets;
+        private Texture2D _slimeBulletTexture;
+        private ICollisionHandler _slimeBulletCollisionHandler;
 
         #endregion
 
@@ -116,7 +120,23 @@ namespace ForkKnight.States
                 },
             };
 
+            var purpleSlimeSheet = _contentManager.Load<Texture2D>(@"GameObjects\PurpleSlime\sheet");
+
+            var purpleSlimeAnimations = new Dictionary<CurrentAnimation, Animation>
+            {
+                {
+                    CurrentAnimation.Idle,
+                    new Animation(purpleSlimeSheet, 24, 24)
+                },
+                {
+                    CurrentAnimation.Run,
+                    new Animation(purpleSlimeSheet, 24, 24)
+                },
+            };
+
             IAnimationManager slimeAnimationManager = new AnimationManager(greenSlimeAnimations);
+
+            IAnimationManager purpleSlimeAnimationManager = new AnimationManager(purpleSlimeAnimations);
 
             IAnimationManager knightAnimationManager = new AnimationManager(knightAnimations);
 
@@ -130,6 +150,24 @@ namespace ForkKnight.States
             var collisionHandler = new CollisionHandler(new SolidObjectCollisionResponder(), collisionRects);
             var playerPickupCollisionHandler = new CoinCollisionHandler(new CoinCollisionResponder());
             var playerEnemyCollisionHandler = new PlayerEnemyCollisionHandler(new PlayerEnemyCollisionResponder());
+
+            #endregion
+
+            #region Knight
+
+            var spawnPosKnight = Vector2.One;
+
+            foreach (var o in level2.ObjectGroups["Spawn"].Objects)
+                spawnPosKnight = new Vector2((int)o.X, (int)o.Y - (int)o.Height);
+
+            _knight = new Knight(
+                movementManager,
+                collisionHandler,
+                knightAnimationManager,
+                new KeyboardReader())
+            {
+                Position = spawnPosKnight
+            };
 
             #endregion
 
@@ -153,23 +191,20 @@ namespace ForkKnight.States
                 });
             }
 
-            #endregion
+            _purpleSlimes = new List<GameObject>();
 
-            #region Knight
+            _slimeBullets = new List<GameObject>();
+            _slimeBulletTexture = _contentManager.Load<Texture2D>(@"GameObjects\PurpleSlime\slimeBullet");
+            _slimeBulletCollisionHandler =
+                new CollisionHandler(new SlimeBulletSolidObjectCollisionResponder(), collisionRects);
 
-            var spawnPosKnight = Vector2.One;
-
-            foreach (var o in level2.ObjectGroups["Spawn"].Objects)
-                spawnPosKnight = new Vector2((int)o.X, (int)o.Y - (int)o.Height);
-
-            _knight = new Knight(
-                movementManager,
-                collisionHandler,
-                knightAnimationManager,
-                new KeyboardReader())
+            foreach (var o in level2.ObjectGroups["PurpleSlime"].Objects)
             {
-                Position = spawnPosKnight
-            };
+                _purpleSlimes.Add(new PurpleSlime(movementManager, collisionHandler, purpleSlimeAnimationManager, new PurpleSlimeMovement(), playerEnemyCollisionHandler, _knight)
+                {
+                    Position = new Vector2((int)o.X, (int)o.Y - (int)o.Height)
+                });
+            }
 
             #endregion
 
@@ -192,23 +227,26 @@ namespace ForkKnight.States
 
         public override void Draw(GameTime gameTime, SpriteBatch spriteBatch)
         {
-            Texture2D texture;
-
-            texture = new Texture2D(_graphicsDevice, 1, 1);
-            texture.SetData(new Color[] {Color.Red});
             spriteBatch.Begin();
 
             spriteBatch.Draw(_background, new Rectangle(0, 0, _graphicsDevice.Viewport.Width, _graphicsDevice.Viewport.Height), Color.White);
+
             _tileMapManager.Draw(spriteBatch);
+
             _knight.Draw(spriteBatch, gameTime);
+
             foreach (var greenSlime in _greenSlimes)
-            {
                 greenSlime.Draw(spriteBatch, gameTime);
-            }
             foreach (var coin in _coins)
             {
                 coin.Draw(spriteBatch, gameTime);
             }
+
+            foreach (var purpleSlime in _purpleSlimes)
+                purpleSlime.Draw(spriteBatch, gameTime);
+
+            foreach (var slimeBullet in _slimeBullets)
+                slimeBullet.Draw(spriteBatch, gameTime);
 
             spriteBatch.End();
         }
@@ -220,26 +258,33 @@ namespace ForkKnight.States
 
         public override void Update(GameTime gameTime)
         {
-            bool allDestroyed = _coins.All(coin => coin.IsDestroyed);
             _knight.Update(gameTime);
-
             foreach (var greenSlime in _greenSlimes)
-            {
                 greenSlime.Update(gameTime);
+
+            foreach (var purpleSlime in _purpleSlimes)
+            {
+                purpleSlime.Update(gameTime);
+                var slime = purpleSlime as PurpleSlime;
+                var slimeBullet = slime.Shoot(_slimeBulletTexture, _slimeBulletCollisionHandler, gameTime);
+                if (slimeBullet != null)
+                    _slimeBullets.Add(slimeBullet);
             }
+
+            foreach (var slimeBullet in _slimeBullets)
+                slimeBullet.Update(gameTime);
+
             foreach (var coin in _coins)
-            {
                 coin.Update(gameTime);
-            }
-            if (allDestroyed)
-            {
-                _game.ChangeState(new VictoryState(_game, _graphicsDevice, _contentManager));
-            }
+
 
             if (_knight.Position.Y > _graphicsDevice.Viewport.Height + 100 || _knight.IsDestroyed)
-            {
                 _game.ChangeState(new DeathState(_game, _graphicsDevice, _contentManager));
-            }
+
+            var allDestroyed = _coins.All(coin => coin.IsDestroyed);
+            if (allDestroyed)
+                _game.ChangeState(new Level2State(_game, _graphicsDevice, _contentManager));
+
         }
     }
 }

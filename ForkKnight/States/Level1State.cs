@@ -121,8 +121,6 @@ namespace ForkKnight.States
                 },
             };
 
-            IAnimationManager slimeAnimationManager = new AnimationManager(greenSlimeAnimations);
-
             var purpleSlimeSheet = _contentManager.Load<Texture2D>(@"GameObjects\PurpleSlime\sheet");
 
             var purpleSlimeAnimations = new Dictionary<CurrentAnimation, Animation>
@@ -208,8 +206,6 @@ namespace ForkKnight.States
                     Position = new Vector2((int)o.X, (int)o.Y - (int)o.Height)
                 });
             }
-
-
 
             #endregion
 
