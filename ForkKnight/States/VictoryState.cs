@@ -55,7 +55,7 @@ namespace ForkKnight.States
 
             spriteBatch.Draw(_background, new Rectangle(0, 0, _graphicsDevice.Viewport.Width, _graphicsDevice.Viewport.Height), Color.White);
 
-            spriteBatch.DrawString(_font, "VICTORY", new Vector2(_graphicsDevice.Viewport.Width / 2 - _font.MeasureString("Game Over").Length() / 2, 120), Color.White);
+            spriteBatch.DrawString(_font, "VICTORY", new Vector2(_graphicsDevice.Viewport.Width / 2 - _font.MeasureString("VICTORY").Length() / 2, 120), Color.White);
 
             foreach (var c in _components)
                 c.Draw(gameTime, spriteBatch);

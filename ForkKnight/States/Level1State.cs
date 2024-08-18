@@ -220,6 +220,7 @@ namespace ForkKnight.States
 
         public override void Update(GameTime gameTime)
         {
+            bool allDestroyed = _coins.All(coin => coin.IsDestroyed);
             _knight.Update(gameTime);
             foreach (var greenSlime in _greenSlimes)
             {
@@ -230,6 +231,12 @@ namespace ForkKnight.States
             {
                 coin.Update(gameTime);
             }
+
+            if (allDestroyed)
+            {
+                _game.ChangeState(new Level2State(_game, _graphicsDevice, _contentManager));
+            }
+
 
             if (_knight.Position.Y > _graphicsDevice.Viewport.Height + 100 || _knight.IsDestroyed)
             {
