@@ -9,11 +9,11 @@ using System.Threading.Tasks;
 
 namespace ForkKnight.Collisions
 {
-    internal class PlayerPlayerEnemyCollisionHandler : IPlayerEnemyCollisionHandler
+    internal class PlayerEnemyCollisionHandler : IPlayerEnemyCollisionHandler
     {
         private readonly ICollisionResponder _collisionResponder;
 
-        public PlayerPlayerEnemyCollisionHandler(ICollisionResponder collisionResponder)
+        public PlayerEnemyCollisionHandler(ICollisionResponder collisionResponder)
         {
             _collisionResponder = collisionResponder;
         }
