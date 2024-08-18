@@ -3,29 +3,30 @@ using ForkKnight.GameObjects;
 using Microsoft.Xna.Framework;
 using System;
 using System.Collections.Generic;
+using System.Diagnostics;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
 namespace ForkKnight.Collisions
 {
-    internal class CoinCollisionHandler : ICoinCollisionHandler
+    internal class CoinCollisionHandler : IPickupCollisionHandler
     {
-        private readonly ICoinCollisionResponder _coincollisionResponder;
-
-        public CoinCollisionHandler(ICoinCollisionResponder collisionResponder)
+        public ICollisionResponder CollisionResponder { get; }
+        
+        public CoinCollisionHandler(ICollisionResponder collisionResponder)
         {
-            _coincollisionResponder = collisionResponder;
+            CollisionResponder = collisionResponder;
         }
 
-        public void CheckCollision(GameObject player, List<Coin> coins)
+        public void CheckCollision(GameObject player, List<Pickup> coins)
         {
             foreach (var coin in coins)
             {
                 if (player.Hitbox.Intersects(coin.Hitbox))
                 {
-                    Console.WriteLine("collided");
-                    _coincollisionResponder.RespondToCollision(coin, player.Hitbox);
+                    Debug.WriteLine("collided");
+                    CollisionResponder.RespondToCollision(coin, player.Hitbox);
 
                     break;
                 }

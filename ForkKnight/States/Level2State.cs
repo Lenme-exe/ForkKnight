@@ -46,7 +46,7 @@ namespace ForkKnight.States
 
         #region Coins
 
-        private List<Coin> _coins;
+        private List<Pickup> _coins;
 
         #endregion
 
@@ -102,9 +102,25 @@ namespace ForkKnight.States
                 },
             };
 
+            var coinSheet = contentManager.Load<Texture2D>(@"GameObjects/Coin/coin");
+
+            var coinAnimations = new Dictionary<CurrentAnimation, Animation>()
+            {
+                {
+                    CurrentAnimation.Idle,
+                    new Animation(coinSheet, 16, 16)
+                },
+                {
+                    CurrentAnimation.Run,
+                    new Animation(coinSheet, 16, 16)
+                },
+            };
+
             IAnimationManager slimeAnimationManager = new AnimationManager(greenSlimeAnimations);
 
             IAnimationManager knightAnimationManager = new AnimationManager(knightAnimations);
+
+            IAnimationManager coinAnimationManager = new AnimationManager(coinAnimations);
 
             #endregion
 
@@ -142,13 +158,16 @@ namespace ForkKnight.States
 
             #region coins
 
-            _coins = new List<Coin>();
+            _coins = new List<Pickup>();
 
             foreach (var o in level2.ObjectGroups["Coins"].Objects)
             {
                 var coinPosition = new Vector2((int)o.X, (int)o.Y - (int)o.Height);
-                var coinTexture = contentManager.Load<Texture2D>(@"GameObjects/Coin/coin");  // Make sure to load the correct texture for the coin
-                _coins.Add(new Coin(coinTexture, coinPosition));
+
+                _coins.Add(new Coin(coinAnimationManager)
+                {
+                    Position = coinPosition,
+                });
             }
 
             #endregion

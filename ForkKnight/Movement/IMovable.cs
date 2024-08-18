@@ -22,7 +22,7 @@ namespace ForkKnight.Movement
         Left,
         Right
     }
-    internal interface IMovable : ICollidable
+    internal interface IMovable
     {
         Vector2 Position { get; set; }
 

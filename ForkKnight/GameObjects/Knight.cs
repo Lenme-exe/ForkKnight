@@ -12,17 +12,17 @@ namespace ForkKnight.GameObjects
     internal class Knight : GameObject
     {
         private readonly IEnemyCollisionHandler _enemyCollisionHandler;
-        private readonly ICoinCollisionHandler _coinCollisionHandler;
+        private readonly IPickupCollisionHandler _coinCollisionHandler;
         private readonly List<GameObject> _enemies;
-        private readonly List<Coin> _coins;
+        private readonly List<Pickup> _coins;
         public Knight(
             IMovementManager movementManager,
             ICollisionHandler collisionHandler,
             IAnimationManager animationManager,
             IInputReader inputReader,
             IEnemyCollisionHandler enemyCollisionHandler,
-            ICoinCollisionHandler coinCollisionHandler,
-            List<Coin> coins,
+            IPickupCollisionHandler coinCollisionHandler,
+            List<Pickup> coins,
             List<GameObject> enemies) : base(movementManager, collisionHandler, animationManager, inputReader)
         {
             HitboxOffsetX = 9;

@@ -10,21 +10,21 @@ using Microsoft.Xna.Framework;
 
 namespace ForkKnight.Collisions.Responders
 {
-    internal class CoinCollisionResponder : ICoinCollisionResponder
+    internal class CoinCollisionResponder : ICollisionResponder
     {
-        public void RespondToCollision(Coin gameObject, Rectangle collisionRectangle)
+        public void RespondToCollision(GameObject gameObject, Rectangle collisionRectangle)
         {
-            Console.WriteLine("test respond to coin");
-            if (gameObject.Hitbox.Intersects(collisionRectangle))
-            {
-                HandleCoinCollision(gameObject);
-            }
+            throw new NotImplementedException();
         }
 
-        private void HandleCoinCollision(Coin gameObject)
+        public void RespondToCollision(Pickup pickup, Rectangle collisionRectangle)
         {
-            Console.WriteLine("collected coin");
-            gameObject = null;
+            Debug.WriteLine("test respond to coin");
+            if (pickup.Hitbox.Intersects(collisionRectangle))
+            {
+                Debug.WriteLine("collected coin");
+                pickup.Destroy();
+            }
         }
     }
 

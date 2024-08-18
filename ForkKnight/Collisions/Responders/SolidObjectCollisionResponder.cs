@@ -9,7 +9,7 @@ using Microsoft.Xna.Framework;
 
 namespace ForkKnight.Collisions.Responders
 {
-    internal class SolidObjectCollisionResponder : IEnemyCollisionResponder
+    internal class SolidObjectCollisionResponder : ICollisionResponder
     {
         public void RespondToCollision(GameObject gameObject, Rectangle collisionRectangle)
         {
@@ -46,6 +46,11 @@ namespace ForkKnight.Collisions.Responders
                     gameObject.Velocity = new Vector2(0, gameObject.Velocity.Y);
                 }
             }
+        }
+
+        public void RespondToCollision(Pickup pickup, Rectangle collisionRectangle)
+        {
+            throw new NotImplementedException();
         }
     }
 }

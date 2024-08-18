@@ -10,11 +10,11 @@ namespace ForkKnight.Collisions
 {
     internal class CollisionHandler : ICollisionHandler
     {
-        public IEnemyCollisionResponder CollisionResponder { get; }
+        public ICollisionResponder CollisionResponder { get; }
 
         private readonly List<Rectangle> _collisionRects;
 
-        public CollisionHandler(IEnemyCollisionResponder collisionResponder, List<Rectangle> collisionRectangles)
+        public CollisionHandler(ICollisionResponder collisionResponder, List<Rectangle> collisionRectangles)
         {
             CollisionResponder = collisionResponder;
             _collisionRects = collisionRectangles;

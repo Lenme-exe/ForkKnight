@@ -49,6 +49,13 @@ internal class AnimationManager: IAnimationManager
         CurrentAnimation.Update(gameTime);
     }
 
+    public void Update(Pickup pickup, GameTime gameTime)
+    {
+        Play(Movement.CurrentAnimation.Idle);
+
+        CurrentAnimation.Update(gameTime);
+    }
+
     public void Draw(SpriteBatch spriteBatch, GameObject gameObject, GameTime gameTime)
     {
         var effect = SpriteEffects.None;
@@ -57,5 +64,10 @@ internal class AnimationManager: IAnimationManager
             effect = SpriteEffects.FlipHorizontally;
 
         CurrentAnimation.Draw(spriteBatch, gameObject.Position, gameTime, effect);
+    }
+
+    public void Draw(SpriteBatch spriteBatch, Pickup pickup, GameTime gameTime)
+    {
+        CurrentAnimation.Draw(spriteBatch, pickup.Position, gameTime);
     }
 }

@@ -9,8 +9,9 @@ using Microsoft.Xna.Framework;
 
 namespace ForkKnight.Collisions.Responders
 {
-    internal interface IEnemyCollisionResponder
+    internal interface ICollisionResponder
     {
         void RespondToCollision(GameObject gameObject, Rectangle collisionRectangle);
+        void RespondToCollision(Pickup pickup, Rectangle collisionRectangle);
     }
 }

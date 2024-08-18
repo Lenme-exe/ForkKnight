@@ -11,9 +11,9 @@ namespace ForkKnight.Collisions
 {
     internal class EnemyCollisionHandler : IEnemyCollisionHandler
     {
-        private readonly IEnemyCollisionResponder _collisionResponder;
+        private readonly ICollisionResponder _collisionResponder;
 
-        public EnemyCollisionHandler(IEnemyCollisionResponder collisionResponder)
+        public EnemyCollisionHandler(ICollisionResponder collisionResponder)
         {
             _collisionResponder = collisionResponder;
         }
