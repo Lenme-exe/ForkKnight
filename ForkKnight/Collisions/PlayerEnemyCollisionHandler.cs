@@ -9,23 +9,21 @@ using System.Threading.Tasks;
 
 namespace ForkKnight.Collisions
 {
-    internal class PlayerPlayerEnemyCollisionHandler : IPlayerEnemyCollisionHandler
+    internal class PlayerEnemyCollisionHandler : IPlayerEnemyCollisionHandler
     {
         private readonly ICollisionResponder _collisionResponder;
 
-        public PlayerPlayerEnemyCollisionHandler(ICollisionResponder collisionResponder)
+        public PlayerEnemyCollisionHandler(ICollisionResponder collisionResponder)
         {
             _collisionResponder = collisionResponder;
         }
 
         public void CheckCollision(Enemy enemy, GameObject player)
         {
-            if (player.Hitbox.Intersects(enemy.Hitbox))
-            {
-                _collisionResponder.RespondToCollision(player, enemy.Hitbox);
+            if (!player.Hitbox.Intersects(enemy.Hitbox)) return;
+            _collisionResponder.RespondToCollision(player, enemy.Hitbox);
 
-                _collisionResponder.RespondToCollision(enemy, player.Hitbox);
-            }
+            _collisionResponder.RespondToCollision(enemy, player.Hitbox);
         }
     }
 }

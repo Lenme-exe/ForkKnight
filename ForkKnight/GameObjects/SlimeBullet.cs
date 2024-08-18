@@ -28,11 +28,6 @@ namespace ForkKnight.GameObjects
             Acceleration = 2f;
         }
 
-        public override void Update(GameTime gameTime)
-        {
-            base.Update(gameTime);
-        }
-
         public override void UpdateHitbox()
         {
             var hitboxWidth = 16 - 5 - 5;

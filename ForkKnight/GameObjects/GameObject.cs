@@ -49,19 +49,17 @@ namespace ForkKnight.GameObjects
 
         public virtual void Update(GameTime gameTime)
         {
-            if (!IsDestroyed)
-            {
-                _movementManager.Move(this, gameTime);
-                _collisionHandler.CheckCollision(this);
-                _animationManager.Update(this, gameTime);
-                UpdateHitbox();
-            }
+            if (IsDestroyed) return;
+            _movementManager.Move(this, gameTime);
+            _collisionHandler.CheckCollision(this);
+            _animationManager.Update(this, gameTime);
+            UpdateHitbox();
         }
 
         public virtual void Draw(SpriteBatch spriteBatch, GameTime gameTime)
         {
-            if (!IsDestroyed)
-                _animationManager.Draw(spriteBatch, this, gameTime);
+            if (IsDestroyed) return;
+            _animationManager.Draw(spriteBatch, this, gameTime);
         }
 
         public virtual void UpdateHitbox()

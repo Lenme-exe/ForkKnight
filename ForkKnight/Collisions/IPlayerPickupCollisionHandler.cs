@@ -7,8 +7,8 @@ using System.Threading.Tasks;
 
 namespace ForkKnight.Collisions
 {
-    internal interface IPickupCollisionHandler
+    internal interface IPlayerPickupCollisionHandler
     {
-        void CheckCollision(GameObject player, List<Pickup> pickups);
+        void CheckCollision(Pickup pickup, GameObject player);
     }
 }

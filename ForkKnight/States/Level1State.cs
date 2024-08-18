@@ -151,24 +151,8 @@ namespace ForkKnight.States
 
             var movementManager = new MovementManager(new JumpManager());
             var collisionHandler = new CollisionHandler(new SolidObjectCollisionResponder(), collisionRects);
-            var coinCollisionHandler = new CoinCollisionHandler(new CoinCollisionResponder());
-            var playerCollisionHandler = new PlayerPlayerEnemyCollisionHandler(new PlayerEnemyCollisionResponder());
-
-            #endregion
-
-            #region coins
-
-            _coins = new List<Pickup>();
-
-            foreach (var o in level1.ObjectGroups["Coins"].Objects)
-            {
-                var coinPosition = new Vector2((int)o.X, (int)o.Y - (int)o.Height);
-
-                _coins.Add(new Coin(coinAnimationManager)
-                {
-                    Position = coinPosition,
-                });
-            }
+            var playerPickupCollisionHandler = new CoinCollisionHandler(new CoinCollisionResponder());
+            var playerEnemyCollisionHandler = new PlayerEnemyCollisionHandler(new PlayerEnemyCollisionResponder());
 
             #endregion
 
@@ -183,9 +167,7 @@ namespace ForkKnight.States
                 movementManager,
                 collisionHandler,
                 knightAnimationManager,
-                new KeyboardReader(),
-                coinCollisionHandler,
-                _coins)
+                new KeyboardReader())
             {
                 Position = spawnPosKnight
             };
@@ -206,7 +188,7 @@ namespace ForkKnight.States
             foreach (var o in level1.ObjectGroups["GreenSlime"].Objects)
             {
                 _greenSlimes.Add(new GreenSlime(movementManager, collisionHandler, greenSlimeAnimationManager,
-                    new GreenSlimeMovement(), playerCollisionHandler, _knight, limitBoxes)
+                    new GreenSlimeMovement(), playerEnemyCollisionHandler, _knight, limitBoxes)
                 {
                     Position = new Vector2((int)o.X, (int)o.Y - (int)o.Height)
                 });
@@ -221,13 +203,29 @@ namespace ForkKnight.States
 
             foreach (var o in level1.ObjectGroups["PurpleSlime"].Objects)
             {
-                _purpleSlimes.Add(new PurpleSlime(movementManager, collisionHandler, purpleSlimeAnimationManager, new PurpleSlimeMovement(), playerCollisionHandler, _knight)
+                _purpleSlimes.Add(new PurpleSlime(movementManager, collisionHandler, purpleSlimeAnimationManager, new PurpleSlimeMovement(), playerEnemyCollisionHandler, _knight)
                 {
                     Position = new Vector2((int)o.X, (int)o.Y - (int)o.Height)
                 });
             }
 
 
+
+            #endregion
+
+            #region coins
+
+            _coins = new List<Pickup>();
+
+            foreach (var o in level1.ObjectGroups["Coins"].Objects)
+            {
+                var coinPosition = new Vector2((int)o.X, (int)o.Y - (int)o.Height);
+
+                _coins.Add(new Coin(coinAnimationManager, _knight, playerPickupCollisionHandler)
+                {
+                    Position = coinPosition,
+                });
+            }
 
             #endregion
         }
@@ -265,7 +263,6 @@ namespace ForkKnight.States
 
         public override void Update(GameTime gameTime)
         {
-            bool allDestroyed = _coins.All(coin => coin.IsDestroyed);
             _knight.Update(gameTime);
             foreach (var greenSlime in _greenSlimes)
                 greenSlime.Update(gameTime);
@@ -280,25 +277,18 @@ namespace ForkKnight.States
             }
 
             foreach (var slimeBullet in _slimeBullets)
-            {
                 slimeBullet.Update(gameTime);
-            }
 
             foreach (var coin in _coins)
-            {
                 coin.Update(gameTime);
-            }
-
-            if (allDestroyed)
-            {
-                _game.ChangeState(new Level2State(_game, _graphicsDevice, _contentManager));
-            }
 
 
             if (_knight.Position.Y > _graphicsDevice.Viewport.Height + 100 || _knight.IsDestroyed)
-            {
                 _game.ChangeState(new DeathState(_game, _graphicsDevice, _contentManager));
-            }
+
+            var allDestroyed = _coins.All(coin => coin.IsDestroyed);
+            if (allDestroyed)
+                _game.ChangeState(new Level2State(_game, _graphicsDevice, _contentManager));
         }
     }
 }

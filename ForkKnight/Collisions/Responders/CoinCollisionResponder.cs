@@ -19,12 +19,8 @@ namespace ForkKnight.Collisions.Responders
 
         public void RespondToCollision(Pickup pickup, Rectangle collisionRectangle)
         {
-            Debug.WriteLine("test respond to coin");
-            if (pickup.Hitbox.Intersects(collisionRectangle))
-            {
-                Debug.WriteLine("collected coin");
-                pickup.Destroy();
-            }
+            if (!pickup.Hitbox.Intersects(collisionRectangle)) return;
+            pickup.Destroy();
         }
     }
 

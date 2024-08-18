@@ -16,14 +16,19 @@ namespace ForkKnight.GameObjects
         public int HitboxOffsetX { get; set; }
         public int HitboxOffsetY { get; set; }
         public Vector2 Position { get; set; }
+
+        public GameObject Player { get; private set; }
         public bool IsDestroyed { get; private set; }
 
         private readonly IAnimationManager _animationManager;
+        private readonly IPlayerPickupCollisionHandler _playerPlayerPickupCollisionHandler;
 
-        protected Pickup(IAnimationManager animationManager)
+        protected Pickup(IAnimationManager animationManager, GameObject player, IPlayerPickupCollisionHandler playerPlayerPickupCollisionHandler)
         {
             IsDestroyed = false;
+            Player = player;
             _animationManager = animationManager;
+            _playerPlayerPickupCollisionHandler = playerPlayerPickupCollisionHandler;
         }
 
         public virtual void Update(GameTime gameTime)
@@ -31,6 +36,7 @@ namespace ForkKnight.GameObjects
             if (!IsDestroyed)
             {
                 _animationManager.Update(this, gameTime);
+                _playerPlayerPickupCollisionHandler.CheckCollision(this, Player);
                 UpdateHitbox();
             }
         }

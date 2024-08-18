@@ -10,7 +10,7 @@ using System.Threading.Tasks;
 
 namespace ForkKnight.Collisions
 {
-    internal class CoinCollisionHandler : IPickupCollisionHandler
+    internal class CoinCollisionHandler : IPlayerPickupCollisionHandler
     {
         public ICollisionResponder CollisionResponder { get; }
         
@@ -19,17 +19,11 @@ namespace ForkKnight.Collisions
             CollisionResponder = collisionResponder;
         }
 
-        public void CheckCollision(GameObject player, List<Pickup> coins)
+        public void CheckCollision(Pickup pickup, GameObject player)
         {
-            foreach (var coin in coins)
+            if (player.Hitbox.Intersects(pickup.Hitbox))
             {
-                if (player.Hitbox.Intersects(coin.Hitbox))
-                {
-                    Debug.WriteLine("collided");
-                    CollisionResponder.RespondToCollision(coin, player.Hitbox);
-
-                    break;
-                }
+                CollisionResponder.RespondToCollision(pickup, player.Hitbox);
             }
         }
     }

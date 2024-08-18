@@ -128,9 +128,8 @@ namespace ForkKnight.States
 
             var movementManager = new MovementManager(new JumpManager());
             var collisionHandler = new CollisionHandler(new SolidObjectCollisionResponder(), collisionRects);
-            var coinCollisionHandler = new CoinCollisionHandler(new CoinCollisionResponder());
-            
-            var playerCollisionHandler = new PlayerPlayerEnemyCollisionHandler(new PlayerEnemyCollisionResponder());
+            var playerPickupCollisionHandler = new CoinCollisionHandler(new CoinCollisionResponder());
+            var playerEnemyCollisionHandler = new PlayerEnemyCollisionHandler(new PlayerEnemyCollisionResponder());
 
             #endregion
 
@@ -148,25 +147,9 @@ namespace ForkKnight.States
             foreach (var o in level2.ObjectGroups["GreenSlime"].Objects)
             {
                 _greenSlimes.Add(new GreenSlime(movementManager, collisionHandler, slimeAnimationManager,
-                    new GreenSlimeMovement(), playerCollisionHandler, _knight, limitBoxes)
+                    new GreenSlimeMovement(), playerEnemyCollisionHandler, _knight, limitBoxes)
                 {
                     Position = new Vector2((int)o.X, (int)o.Y - (int)o.Height)
-                });
-            }
-
-            #endregion
-
-            #region coins
-
-            _coins = new List<Pickup>();
-
-            foreach (var o in level2.ObjectGroups["Coins"].Objects)
-            {
-                var coinPosition = new Vector2((int)o.X, (int)o.Y - (int)o.Height);
-
-                _coins.Add(new Coin(coinAnimationManager)
-                {
-                    Position = coinPosition,
                 });
             }
 
@@ -183,12 +166,26 @@ namespace ForkKnight.States
                 movementManager,
                 collisionHandler,
                 knightAnimationManager,
-                new KeyboardReader(),
-                coinCollisionHandler,
-                _coins)
+                new KeyboardReader())
             {
                 Position = spawnPosKnight
             };
+
+            #endregion
+
+            #region coins
+
+            _coins = new List<Pickup>();
+
+            foreach (var o in level2.ObjectGroups["Coins"].Objects)
+            {
+                var coinPosition = new Vector2((int)o.X, (int)o.Y - (int)o.Height);
+
+                _coins.Add(new Coin(coinAnimationManager, _knight, playerPickupCollisionHandler)
+                {
+                    Position = coinPosition,
+                });
+            }
 
             #endregion
         }
