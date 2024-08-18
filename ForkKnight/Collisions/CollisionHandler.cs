@@ -6,27 +6,28 @@ using ForkKnight.GameObjects;
 using ForkKnight.Movement;
 using Microsoft.Xna.Framework;
 
-namespace ForkKnight.Collisions;
-
-internal class CollisionHandler : ICollisionHandler
+namespace ForkKnight.Collisions
 {
-    public IEnemyCollisionResponder CollisionResponder { get; }
-
-    private readonly List<Rectangle> _collisionRects;
-
-    public CollisionHandler(IEnemyCollisionResponder collisionResponder, List<Rectangle> collisionRectangles)
+    internal class CollisionHandler : ICollisionHandler
     {
-        CollisionResponder = collisionResponder;
-        _collisionRects = collisionRectangles;
-    }
+        public IEnemyCollisionResponder CollisionResponder { get; }
 
-    public void CheckCollision(GameObject gameObjects)
-    {
-        foreach (var rect in _collisionRects)
+        private readonly List<Rectangle> _collisionRects;
+
+        public CollisionHandler(IEnemyCollisionResponder collisionResponder, List<Rectangle> collisionRectangles)
         {
-            if (gameObjects.Hitbox.Intersects(rect))
+            CollisionResponder = collisionResponder;
+            _collisionRects = collisionRectangles;
+        }
+
+        public void CheckCollision(GameObject gameObjects)
+        {
+            foreach (var rect in _collisionRects)
             {
-                CollisionResponder.RespondToCollision(gameObjects, rect);
+                if (gameObjects.Hitbox.Intersects(rect))
+                {
+                    CollisionResponder.RespondToCollision(gameObjects, rect);
+                }
             }
         }
     }

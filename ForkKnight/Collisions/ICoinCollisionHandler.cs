@@ -9,6 +9,6 @@ namespace ForkKnight.Collisions
 {
     internal interface ICoinCollisionHandler
     {
-        void CheckCollision(GameObject player, List<Coin> enemies);
+        void CheckCollision(GameObject player, List<Coin> coins);
     }
 }

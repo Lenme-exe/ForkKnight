@@ -3,7 +3,9 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using ForkKnight.Collisions;
 using ForkKnight.Animations;
+using ForkKnight.States;
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
 
@@ -22,8 +24,6 @@ namespace ForkKnight.GameObjects
         {
             _position = position;
             _animation = new Animation(texture, _width, _height);
-
-            Hitbox = new Rectangle((int)_position.X, (int)_position.Y, _width, _height);
         }
 
         public void Update(GameTime gameTime)
