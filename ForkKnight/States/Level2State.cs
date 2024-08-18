@@ -283,7 +283,7 @@ namespace ForkKnight.States
 
             var allDestroyed = _coins.All(coin => coin.IsDestroyed);
             if (allDestroyed)
-                _game.ChangeState(new Level2State(_game, _graphicsDevice, _contentManager));
+                _game.ChangeState(new VictoryState(_game, _graphicsDevice, _contentManager));
 
         }
     }
